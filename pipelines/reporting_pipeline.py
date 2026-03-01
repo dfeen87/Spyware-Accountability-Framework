@@ -69,10 +69,12 @@ def generate_brief(network_data: Dict[str, Any], osint_data: Dict[str, Any], out
     brief_content = brief_content.replace("{{ iocs_list }}", iocs_list)
     brief_content = brief_content.replace("{{ infrastructure_graph }}", infrastructure_graph)
 
-    with open(f"{output_path}/defensive_brief.md", 'w') as f:
-        f.write(brief_content)
-
-    logging.info(f"Brief successfully written to {output_path}/defensive_brief.md")
+    try:
+        with open(f"{output_path}/defensive_brief.md", 'w') as f:
+            f.write(brief_content)
+        logging.info(f"Brief successfully written to {output_path}/defensive_brief.md")
+    except IOError as e:
+        logging.error(f"Failed to write defensive brief: {e}")
 
 
 def run_pipeline(network_report_path: str, osint_graph_path: str, output_dir: str) -> None:
@@ -90,12 +92,18 @@ def run_pipeline(network_report_path: str, osint_graph_path: str, output_dir: st
     except FileNotFoundError:
         logging.error(f"Network report not found: {network_report_path}")
         network_data = {}
+    except json.JSONDecodeError:
+        logging.error(f"Failed to parse JSON network report: {network_report_path}")
+        network_data = {}
 
     try:
         with open(osint_graph_path, 'r') as f:
             osint_data = json.load(f)
     except FileNotFoundError:
         logging.error(f"OSINT graph not found: {osint_graph_path}")
+        osint_data = {}
+    except json.JSONDecodeError:
+        logging.error(f"Failed to parse JSON OSINT graph: {osint_graph_path}")
         osint_data = {}
 
     # 2. Generate Brief

@@ -74,3 +74,25 @@ def test_reporting_pipeline_missing_inputs(tmp_path):
         content = f.read()
         assert "Draft Intelligence Brief" in content
         assert "No verifiable IOCs" in content
+
+
+def test_reporting_pipeline_malformed_json_inputs(tmp_path):
+    """
+    Tests that the reporting pipeline handles malformed JSON input files gracefully
+    (logs an error and continues) rather than crashing with a JSONDecodeError.
+    """
+    network_input = tmp_path / "bad_network.json"
+    osint_input = tmp_path / "bad_osint.json"
+    output_dir = tmp_path / "reports_bad_json"
+
+    network_input.write_text("{ not valid json }")
+    osint_input.write_text("[ broken")
+
+    # Should not raise; pipeline handles both errors gracefully
+    run_pipeline(str(network_input), str(osint_input), str(output_dir))
+
+    # A partial brief should still be generated (empty inputs)
+    assert os.path.exists(output_dir / "defensive_brief.md")
+    with open(output_dir / "defensive_brief.md", 'r') as f:
+        content = f.read()
+        assert "Draft Intelligence Brief" in content
