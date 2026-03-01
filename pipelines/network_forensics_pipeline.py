@@ -4,6 +4,7 @@ from typing import Dict, Any, List
 import argparse
 
 from ailee_core.models_stub import SyntheticNetworkModelStub, ailee_policy_gate
+from ailee_core.privacy import redact_pii
 
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -48,14 +49,17 @@ def run_pipeline(input_path: str, output_path: str) -> None:
         logging.error(f"Failed to parse JSON input: {input_path}")
         return
 
-    # 2. Analyze via AILEE interfaces
+    # 2. Apply PII redaction before any further processing (v3 privacy overlay)
+    data = redact_pii(data)
+
+    # 3. Analyze via AILEE interfaces
     analyzer = SyntheticNetworkModelStub()
     analysis_result = analyzer.analyze(data)
 
     logging.info(f"AI Classification: {analysis_result.classification_label}")
     logging.info(f"Confidence: {analysis_result.confidence_score}, Risk: {analysis_result.risk_score}")
 
-    # 3. Apply AILEE Governance Policy
+    # 4. Apply AILEE Governance Policy
     if ailee_policy_gate(analysis_result):
         logging.info("Analysis passed AILEE policy gate. Generating actionable report.")
         report = {
@@ -71,7 +75,7 @@ def run_pipeline(input_path: str, output_path: str) -> None:
             "extracted_iocs": []
         }
 
-    # 4. Output Results
+    # 5. Output Results
     try:
         with open(output_path, 'w') as f:
             json.dump(report, f, indent=4)
