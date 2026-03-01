@@ -12,12 +12,16 @@ A **defensive, human-rights-aligned framework** that uses AILEE (Adaptive Integr
 - Produce machine-readable detection artifacts (rules, IOCs) and human-readable briefs.
 - Provide reproducible pipelines for NGOs, journalists, researchers, and defenders.
 
+---
+
 ## Core Principles
 
 - **No Offensive Tooling:** This framework does not provide, analyze, or build exploits. It does not provide instructions for building or improving spyware.
 - **No Targeting of Individuals:** The focus is exclusively on mapping infrastructure, vendor ecosystems, and systemic patterns.
 - **No Real PII or Live Targets:** Any examples, datasets, or tutorials use synthetic or clearly anonymized data.
 - **Defensive Alignment:** Everything is framed as transparency and accountability tooling, operating under strict human-rights alignment.
+
+---
 
 ## Core Components
 
@@ -30,6 +34,8 @@ A **defensive, human-rights-aligned framework** that uses AILEE (Adaptive Integr
 4. **Reputation Network:** `ailee_core/reputation` provides a federated, HMAC-signed reputation query interface for sharing intelligence between trusted NGO partners (v3).
 5. **Rulesets:** Example, synthetic rules (YARA, Sigma, Suricata) demonstrating how to construct defensive signatures safely.
 6. **Governance:** Strict guidelines and checklists to ensure contributions remain aligned with human rights and defensive purposes.
+
+---
 
 ## Repository Structure
 
@@ -70,6 +76,8 @@ Spyware-Accountability-Framework/
 └── SECURITY.md
 ```
 
+---
+
 ## Quickstart
 
 ### Installation
@@ -105,6 +113,8 @@ ruff check .
 mypy ailee_core pipelines
 ```
 
+---
+
 ## AILEE Integration
 
 The `ailee_core` module implements the AILEE architecture (Layering, Policy, and Trust Evaluation):
@@ -113,6 +123,8 @@ The `ailee_core` module implements the AILEE architecture (Layering, Policy, and
 2. Consult AI models for risk/classification scores — using live API backends when configured, or deterministic stubs otherwise.
 3. Apply rigorous policy and trust thresholds before acting on those scores.
 4. Optionally enrich results with federated reputation data from trusted NGO peers.
+
+---
 
 ### Live Backend Configuration
 
@@ -126,12 +138,16 @@ The `ailee_core` module implements the AILEE architecture (Layering, Policy, and
 
 When these variables are unset, the framework falls back to deterministic stub logic.
 
+---
+
 ## Intended Audience
 
 - NGOs and civil society organizations
 - Investigative journalists
 - Security researchers
 - Network defenders
+
+---
 
 ## Roadmap
 
@@ -149,6 +165,16 @@ When these variables are unset, the framework falls back to deterministic stub l
 3. **Automated Threat Briefings:** Enhanced the reporting pipeline to generate Markdown briefs with graph visualization.
 4. **CI/CD for Rulesets:** Automated YARA/Sigma/Suricata validation in CI.
 5. **Community Governance Board:** Formalized review processes in `governance/v2/`.
+
+---
+
+## Acknowledgements
+
+Repository scaffolding, code structure, documentation, were developed with assistance from Google (Jules Pro) — (https://jules.google.com). 
+
+Final review of repository prior to version 3.0.0 release was assisted by Claude (Sonnet 4.6) by Anthropic — (https://www.anthropic.com).
+
+---
 
 ## License
 
