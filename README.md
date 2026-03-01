@@ -214,6 +214,10 @@ When these variables are unset, the framework falls back to deterministic stub l
 
 ---
 
+MIT License - see [`LICENSE`](LICENSE) file.
+
+---
+
 ## Acknowledgements
 
 This project was developed with a combination of original ideas, hands‑on coding, and support from advanced AI systems. I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **Google Jules** for their meaningful assistance in refining concepts, improving clarity, and strengthening the overall quality of this work.
