@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 #   LLM_API_URL  - Base URL of the OpenAI-compatible chat completions endpoint
 #                  (e.g. "https://api.openai.com/v1/chat/completions")
 #   LLM_API_KEY  - Bearer token / API key for the endpoint
-_LLM_API_URL = os.environ.get("LLM_API_URL", "")
-_LLM_API_KEY = os.environ.get("LLM_API_KEY", "")
+# These are read at call time (not import time) so that runtime environment
+# changes and test monkeypatching take effect without reloading the module.
 
 _SYSTEM_PROMPT = (
     "You are a defensive threat-intelligence analyst specializing in mercenary spyware infrastructure. "
@@ -33,7 +33,9 @@ def _call_live_llm(input_data: Dict[str, Any]) -> Optional[AnalysisResult]:
     Returns None if the call fails or the response cannot be parsed, so
     the caller can fall back to deterministic logic.
     """
-    if not _LLM_API_URL or not _LLM_API_KEY:
+    llm_api_url = os.environ.get("LLM_API_URL", "")
+    llm_api_key = os.environ.get("LLM_API_KEY", "")
+    if not llm_api_url or not llm_api_key:
         return None
 
     user_content = (
@@ -53,11 +55,11 @@ def _call_live_llm(input_data: Dict[str, Any]) -> Optional[AnalysisResult]:
     ).encode("utf-8")
 
     req = urllib.request.Request(
-        url=_LLM_API_URL,
+        url=llm_api_url,
         data=request_body,
         headers={
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {_LLM_API_KEY}",
+            "Authorization": f"Bearer {llm_api_key}",
         },
         method="POST",
     )
