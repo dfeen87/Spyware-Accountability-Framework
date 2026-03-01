@@ -43,8 +43,8 @@ def generate_brief(network_data: Dict[str, Any], osint_data: Dict[str, Any], out
     else:
          infrastructure_graph = "No verifiable vendor structures found or AILEE trust threshold not met.\n"
 
-    # Read template
-    template_path = "reports/templates/brief_template.md"
+    # Read template (path resolved relative to this module's location)
+    template_path = Path(__file__).resolve().parent.parent / "reports" / "templates" / "brief_template.md"
     try:
         with open(template_path, 'r') as f:
             template = f.read()

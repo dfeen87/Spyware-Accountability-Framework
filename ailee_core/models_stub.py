@@ -69,9 +69,21 @@ class SyntheticOSINTModelStub(OSINTAnalyzer):
             is_mercenary = True
             reasoning.append("Vendor name matches known synthetic adversary profile.")
 
+        if any(
+            "suspicious_jurisdiction" in (j := str(v.get("jurisdiction", "")).lower())
+            or "offshore" in j
+            for v in vendors
+        ):
+            is_mercenary = True
+            reasoning.append("Vendor registered in a known high-risk or offshore jurisdiction.")
+
         if any(h.get("name") == "BulletproofHosting Example" for h in hosting_providers):
             is_mercenary = True
             reasoning.append("Infrastructure hosted on known abusive ASN.")
+
+        if any("bulletproof" in str(h.get("name", "")).lower() for h in hosting_providers):
+            is_mercenary = True
+            reasoning.append("Infrastructure hosted by a provider flagged as bulletproof hosting.")
 
         if is_mercenary:
             return AnalysisResult(
