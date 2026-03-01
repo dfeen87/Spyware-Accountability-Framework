@@ -1,5 +1,8 @@
 import json
 import os
+from unittest.mock import patch
+from requests.exceptions import RequestException
+
 from pipelines.osint_vendor_mapping_pipeline import run_pipeline
 
 def test_osint_vendor_mapping_pipeline_malicious_input(tmp_path):
@@ -88,3 +91,111 @@ def test_osint_vendor_mapping_pipeline_benign_input(tmp_path):
     assert report["findings"]["classification_label"] == "STANDARD_CORPORATE"
     assert "graph" in report
     assert len(report["graph"]) == 0
+
+@patch("pipelines.osint_vendor_mapping_pipeline.requests.post")
+def test_osint_vendor_mapping_pipeline_webhook_success(mock_post, tmp_path):
+    """
+    Tests that a successful webhook POST occurs when an actionable report is generated
+    and a webhook_url is provided.
+    """
+    input_file = tmp_path / "test_osint_input.json"
+    output_file = tmp_path / "test_osint_output.json"
+
+    # Create mock malicious input
+    mock_data = {
+      "vendors": [
+        {
+          "id": "v-1001",
+          "name": "FakeSpywareCorp LLC",
+          "jurisdiction": "Offshore Haven A"
+        }
+      ],
+      "hosting_providers": [
+        {
+          "id": "h-2001",
+          "name": "BulletproofHosting Example",
+          "asn": "AS64496"
+        }
+      ]
+    }
+
+    with open(input_file, 'w') as f:
+        json.dump(mock_data, f)
+
+    webhook_url = "http://example.com/webhook"
+    run_pipeline(str(input_file), str(output_file), webhook_url=webhook_url)
+
+    mock_post.assert_called_once()
+    args, kwargs = mock_post.call_args
+    assert args[0] == webhook_url
+    assert "json" in kwargs
+    assert kwargs["json"]["status"] == "ACTIONABLE"
+
+@patch("pipelines.osint_vendor_mapping_pipeline.requests.post")
+def test_osint_vendor_mapping_pipeline_webhook_failure_no_crash(mock_post, tmp_path):
+    """
+    Tests that if the webhook POST fails (e.g., Timeout or ConnectionError),
+    the pipeline handles it gracefully and does not crash.
+    """
+    input_file = tmp_path / "test_osint_input.json"
+    output_file = tmp_path / "test_osint_output.json"
+
+    # Create mock malicious input
+    mock_data = {
+      "vendors": [
+        {
+          "id": "v-1001",
+          "name": "FakeSpywareCorp LLC",
+          "jurisdiction": "Offshore Haven A"
+        }
+      ],
+      "hosting_providers": [
+        {
+          "id": "h-2001",
+          "name": "BulletproofHosting Example",
+          "asn": "AS64496"
+        }
+      ]
+    }
+
+    with open(input_file, 'w') as f:
+        json.dump(mock_data, f)
+
+    mock_post.side_effect = RequestException("Mocked connection error")
+    webhook_url = "http://example.com/webhook"
+
+    # Should not raise an exception
+    run_pipeline(str(input_file), str(output_file), webhook_url=webhook_url)
+
+    mock_post.assert_called_once()
+    assert os.path.exists(output_file)
+
+@patch("pipelines.osint_vendor_mapping_pipeline.requests.post")
+def test_osint_vendor_mapping_pipeline_webhook_not_actionable(mock_post, tmp_path):
+    """
+    Tests that the webhook is NOT called if the report is not ACTIONABLE,
+    even if a webhook URL is provided.
+    """
+    input_file = tmp_path / "test_osint_input_benign.json"
+    output_file = tmp_path / "test_osint_output_benign.json"
+
+    # Create mock benign input
+    mock_data = {
+      "vendors": [
+        {
+          "id": "v-2001",
+          "name": "Legit Local ISP",
+          "jurisdiction": "US"
+        }
+      ],
+      "hosting_providers": []
+    }
+
+    with open(input_file, 'w') as f:
+        json.dump(mock_data, f)
+
+    webhook_url = "http://example.com/webhook"
+    run_pipeline(str(input_file), str(output_file), webhook_url=webhook_url)
+
+    mock_post.assert_not_called()
+    assert os.path.exists(output_file)

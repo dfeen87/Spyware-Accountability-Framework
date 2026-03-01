@@ -1,6 +1,7 @@
 import json
 import logging
 import argparse
+from typing import Optional
 import requests
 from requests.exceptions import RequestException
 
@@ -12,7 +13,7 @@ from ailee_core.privacy import redact_pii
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-def run_pipeline(input_path: str, output_path: str, webhook_url: str = None) -> None:
+def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] = None) -> None:
     """
     Executes the OSINT Vendor Mapping Pipeline on structured OSINT data.
 
