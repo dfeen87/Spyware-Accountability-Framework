@@ -170,9 +170,8 @@ When these variables are unset, the framework falls back to deterministic stub l
 
 ## Acknowledgements
 
-Repository scaffolding, code structure, documentation, were developed with assistance from Google (Jules Pro) — (https://jules.google.com). 
-
-Final review of repository prior to version 3.0.0 release was assisted by Claude (Sonnet 4.6) by Anthropic — (https://www.anthropic.com).
+Repository scaffolding, code structure, and documentation were developed with assistance from Google’s Jules Pro.
+Final repository review prior to the v3.0.0 release was supported by Anthropic’s Claude (Sonnet 4.6).
 
 ---
 
