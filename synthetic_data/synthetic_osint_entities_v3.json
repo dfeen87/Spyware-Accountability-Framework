@@ -1,0 +1,117 @@
+{
+  "dataset_version": "v3",
+  "description": "Synthetic OSINT entities representing a mercenary spyware ecosystem with multiple vendors, shell companies, and bulletproof hosting providers. All data is fully fabricated.",
+  "is_synthetic_dataset": true,
+  "vendors": [
+    {
+      "id": "v-001",
+      "name": "Apex Security Holdings",
+      "legal_name": "Apex Security Holdings S.A.",
+      "jurisdiction": "suspicious_jurisdiction",
+      "registration_date": "2019-03-14",
+      "status": "active",
+      "known_aliases": ["ASH Group", "Apex Cyber Solutions"],
+      "contact_email": "info@apexsecholdings.example",
+      "notes": "Parent entity; registered in offshore jurisdiction with minimal disclosure requirements",
+      "is_synthetic": true
+    },
+    {
+      "id": "v-002",
+      "name": "Global Surveillance Technologies",
+      "legal_name": "Global Surveillance Technologies Ltd.",
+      "jurisdiction": "example_jurisdiction_b",
+      "registration_date": "2020-07-22",
+      "status": "dormant",
+      "known_aliases": ["GST Labs"],
+      "notes": "Subsidiary entity; currently dormant but historically operated spyware delivery infrastructure",
+      "is_synthetic": true
+    },
+    {
+      "id": "v-003",
+      "name": "SecureOps Intelligence LLC",
+      "legal_name": "SecureOps Intelligence LLC",
+      "jurisdiction": "offshore_jurisdiction_c",
+      "registration_date": "2021-11-05",
+      "status": "active",
+      "known_aliases": ["SOI", "SecureOps"],
+      "notes": "Shell company; shares registered agent and registered address with v-001",
+      "is_synthetic": true
+    }
+  ],
+  "hosting_providers": [
+    {
+      "id": "h-001",
+      "name": "Bulletproof Hosting Inc.",
+      "asn": "AS64496",
+      "country": "example_country_1",
+      "abuse_contacts": [],
+      "notes": "Consistently ignores takedown notices; no abuse handling; known host of C2 infrastructure",
+      "is_synthetic": true
+    },
+    {
+      "id": "h-002",
+      "name": "Cloud Infra LLC",
+      "asn": "AS64511",
+      "country": "example_country_2",
+      "abuse_contacts": ["abuse@cloudinfra.example"],
+      "notes": "Standard cloud provider; limited due diligence on customer identity",
+      "is_synthetic": true
+    },
+    {
+      "id": "h-003",
+      "name": "ShieldNet Datacenter",
+      "asn": "AS65000",
+      "country": "example_country_3",
+      "abuse_contacts": [],
+      "notes": "No-log datacenter; advertises anonymity services; associated with bulletproof operations",
+      "is_synthetic": true
+    }
+  ],
+  "domains": [
+    {
+      "domain": "api.auth.example-spyware.xyz",
+      "registered_by": "v-001",
+      "hosted_on": "h-001",
+      "registration_date": "2022-01-10",
+      "registrar": "ExampleRegistrar LLC",
+      "is_synthetic": true
+    },
+    {
+      "domain": "ingest.telemetry.example-spyware.xyz",
+      "registered_by": "v-001",
+      "hosted_on": "h-001",
+      "registration_date": "2022-01-10",
+      "registrar": "ExampleRegistrar LLC",
+      "is_synthetic": true
+    },
+    {
+      "domain": "cmd.c2.example-spyware.xyz",
+      "registered_by": "v-003",
+      "hosted_on": "h-001",
+      "registration_date": "2022-04-18",
+      "registrar": "ExampleRegistrar LLC",
+      "is_synthetic": true
+    },
+    {
+      "domain": "relay.proxy.example-spyware.xyz",
+      "registered_by": "v-003",
+      "hosted_on": "h-003",
+      "registration_date": "2022-06-02",
+      "registrar": "ExampleRegistrar LLC",
+      "is_synthetic": true
+    },
+    {
+      "domain": "update.sys.example-vendor.com",
+      "registered_by": "v-002",
+      "hosted_on": "h-002",
+      "registration_date": "2021-09-15",
+      "registrar": "ExampleRegistrar LLC",
+      "is_synthetic": true
+    }
+  ],
+  "corporate_links": [
+    {"source": "v-001", "target": "v-003", "relationship": "OWNS_SUBSIDIARY"},
+    {"source": "v-001", "target": "v-002", "relationship": "CONTROLS_VIA_DIRECTOR"},
+    {"source": "v-003", "target": "v-002", "relationship": "SHARES_REGISTERED_AGENT"}
+  ]
+}
