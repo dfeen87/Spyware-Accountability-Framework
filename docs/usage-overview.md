@@ -7,8 +7,8 @@ The Spyware Accountability Framework provides three core pipelines to analyze an
 Ensure you have installed the framework in a suitable Python environment (Python 3.9+).
 
 ```bash
-git clone https://github.com/your-org/spyware-accountability-framework.git
-cd spyware-accountability-framework
+git clone https://github.com/dfeen87/Spyware-Accountability-Framework.git
+cd Spyware-Accountability-Framework
 pip install -e .[dev]
 ```
 
