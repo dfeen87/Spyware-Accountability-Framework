@@ -70,6 +70,7 @@ Spyware-Accountability-Framework/
 ├── synthetic_data/                     # Synthetic datasets for testing
 ├── tests/                              # Automated test suite
 ├── pyproject.toml                      # Project metadata and tooling configuration
+├── VALIDATION.md                       # Simulations for this software
 ├── CONTRIBUTING.md
 ├── LICENSE
 └── SECURITY.md
