@@ -8,8 +8,12 @@ At any given time, only the `main` branch and the latest tagged release receive 
 
 If you discover a security vulnerability or note that a piece of synthetic data or rule example could be misused or could inadvertently target individuals, please **DO NOT** create a public issue.
 
-Instead, please open a **private** vulnerability report at:
+**Please contact our organization directly to report security threats.**
+
+You can reach us by opening a **private** vulnerability report through our official GitHub Security Advisories page:
 <https://github.com/dfeen87/Spyware-Accountability-Framework/security/advisories/new>
+
+This is the preferred and secure channel for contacting our organization about any security concern. Using this channel ensures that sensitive details are kept confidential and are only visible to our maintainers.
 
 We commit to:
 1. Acknowledging your report within 48 hours.
