@@ -1,6 +1,8 @@
 import json
 import logging
 import argparse
+import requests
+from requests.exceptions import RequestException
 
 import networkx as nx
 
@@ -10,7 +12,7 @@ from ailee_core.privacy import redact_pii
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-def run_pipeline(input_path: str, output_path: str) -> None:
+def run_pipeline(input_path: str, output_path: str, webhook_url: str = None) -> None:
     """
     Executes the OSINT Vendor Mapping Pipeline on structured OSINT data.
 
@@ -125,11 +127,23 @@ def run_pipeline(input_path: str, output_path: str) -> None:
     except IOError as e:
         logging.error(f"Failed to write output report: {e}")
 
+    # 6. Optional Webhook Forwarding (Active Prevention Handoff)
+    if webhook_url and report.get("status") == "ACTIONABLE":
+        logging.info(f"Forwarding actionable report to webhook: {webhook_url}")
+        try:
+            # Strictly outward posting of intelligence. No returning actions applied locally.
+            response = requests.post(webhook_url, json=report, timeout=10.0)
+            response.raise_for_status()
+            logging.info("Webhook forwarding successful.")
+        except RequestException as e:
+            # Log without failing the pipeline; core SAF responsibility is fulfilled
+            logging.error(f"Failed to forward report to webhook: {e}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the OSINT Vendor Mapping Pipeline.")
     parser.add_argument("--input", required=True, help="Path to structured OSINT JSON dataset.")
     parser.add_argument("--output", required=True, help="Path to write the resulting JSON graph and report.")
+    parser.add_argument("--webhook-url", required=False, help="Optional URL to POST actionable JSON reports to an external Trust Layer or SIEM for active prevention.")
 
     args = parser.parse_args()
-    run_pipeline(args.input, args.output)
+    run_pipeline(args.input, args.output, args.webhook_url)

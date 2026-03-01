@@ -2,6 +2,8 @@ import json
 import logging
 from typing import Dict, List
 import argparse
+import requests
+from requests.exceptions import RequestException
 
 from ailee_core.models_stub import SyntheticNetworkModelStub, ailee_policy_gate
 from ailee_core.privacy import redact_pii
@@ -9,7 +11,7 @@ from ailee_core.privacy import redact_pii
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-def run_pipeline(input_path: str, output_path: str) -> None:
+def run_pipeline(input_path: str, output_path: str, webhook_url: str = None) -> None:
     """
     Executes the Network Forensics Pipeline on synthetic or pre-processed network telemetry.
 
@@ -83,6 +85,19 @@ def run_pipeline(input_path: str, output_path: str) -> None:
     except IOError as e:
         logging.error(f"Failed to write output report: {e}")
 
+    # 6. Optional Webhook Forwarding (Active Prevention Handoff)
+    if webhook_url and report.get("status") == "ACTIONABLE":
+        logging.info(f"Forwarding actionable report to webhook: {webhook_url}")
+        try:
+            # We strictly POST data. We do not process a response or modify local state based on it.
+            # Timeout is relatively short so the pipeline doesn't hang indefinitely on a bad endpoint.
+            response = requests.post(webhook_url, json=report, timeout=10.0)
+            response.raise_for_status()
+            logging.info("Webhook forwarding successful.")
+        except RequestException as e:
+            # We log the error but do NOT crash the pipeline. SAF's core job is done (generating the output).
+            logging.error(f"Failed to forward report to webhook: {e}")
+
 
 def extract_features_from_markdown(content: str) -> Dict[str, List[str]]:
     """
@@ -106,6 +121,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the Network Forensics Pipeline.")
     parser.add_argument("--input", required=True, help="Path to synthetic network capture or description.")
     parser.add_argument("--output", required=True, help="Path to write the resulting JSON report.")
+    parser.add_argument("--webhook-url", required=False, help="Optional URL to POST actionable JSON reports to an external Trust Layer or SIEM for active prevention.")
 
     args = parser.parse_args()
-    run_pipeline(args.input, args.output)
+    run_pipeline(args.input, args.output, args.webhook_url)
