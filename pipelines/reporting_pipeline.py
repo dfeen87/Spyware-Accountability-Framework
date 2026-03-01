@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any
 import argparse
 from pathlib import Path
 
@@ -12,7 +12,7 @@ def generate_brief(network_data: Dict[str, Any], osint_data: Dict[str, Any], out
     Generates a human-readable Markdown brief summarizing the AILEE-vetted findings
     using the v2 automated threat briefing template.
     """
-    logging.info(f"Generating defensive intelligence brief...")
+    logging.info("Generating defensive intelligence brief...")
 
     status_msg = "Critical Alert: Spyware Ecosystem Mapped"
     if network_data.get("status") != "ACTIONABLE" or osint_data.get("status") != "ACTIONABLE":

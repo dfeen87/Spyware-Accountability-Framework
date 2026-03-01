@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Dict, Any, List
+from typing import Dict, List
 import argparse
 
 from ailee_core.models_stub import SyntheticNetworkModelStub, ailee_policy_gate

@@ -4,7 +4,6 @@ Tests for the v3 Decentralized Reputation Network module (ailee_core/reputation.
 
 import json
 import time
-import pytest
 from unittest.mock import patch, MagicMock
 
 from ailee_core.reputation import (
