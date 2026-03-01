@@ -1,6 +1,5 @@
 import json
 import os
-import pytest
 from pipelines.network_forensics_pipeline import run_pipeline
 
 def test_network_forensics_pipeline_malicious_input(tmp_path):

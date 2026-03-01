@@ -2,7 +2,6 @@
 Tests for the v3 Advanced Graph Analytics backend (ailee_core/backends/osint_semantic_backend.py).
 """
 
-import pytest
 import networkx as nx
 
 from ailee_core.backends.osint_semantic_backend import (

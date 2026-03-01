@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Spyware Accountability Framework"
+version: 3.0.0
+date-released: 2025-01-01
+authors:
+  - family-names: Feeney Jr.
+    given-names: Don Michael
+    email: dfeen87@gmail.com
+    alias: dfeen87
+abstract: >
+  A defensive, human-rights-aligned framework for detecting and mapping
+  mercenary spyware infrastructure. Provides OSINT graph analytics,
+  network forensics pipelines, privacy-preserving data processing, and
+  a decentralized reputation network for collaborative threat intelligence.
+license: MIT
+repository-code: "https://github.com/dfeen87/Spyware-Accountability-Framework"
+keywords:
+  - defensive
+  - accountability
+  - spyware
+  - osint
+  - forensics
+  - human-rights
+  - threat-intelligence

@@ -82,7 +82,7 @@ def compute_graph_risk_metrics(graph: nx.DiGraph) -> Dict[str, Any]:
         "node_count": graph.number_of_nodes(),
         "edge_count": graph.number_of_edges(),
         "max_centrality": round(max(centrality.values()), 4) if centrality else 0.0,
-        "top_nodes_by_centrality": sorted(centrality, key=centrality.get, reverse=True)[:3],
+        "top_nodes_by_centrality": sorted(centrality, key=lambda n: centrality.get(n, 0.0), reverse=True)[:3],
         "num_components": len(components),
         "largest_component_size": largest,
     }

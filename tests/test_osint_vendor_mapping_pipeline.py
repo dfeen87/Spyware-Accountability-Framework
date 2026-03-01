@@ -1,6 +1,5 @@
 import json
 import os
-import pytest
 from pipelines.osint_vendor_mapping_pipeline import run_pipeline
 
 def test_osint_vendor_mapping_pipeline_malicious_input(tmp_path):

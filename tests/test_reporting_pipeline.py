@@ -1,7 +1,5 @@
 import json
 import os
-import pytest
-from pathlib import Path
 from pipelines.reporting_pipeline import run_pipeline
 
 def test_reporting_pipeline_success(tmp_path):

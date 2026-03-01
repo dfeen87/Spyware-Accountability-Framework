@@ -1,6 +1,5 @@
 import json
 import logging
-from typing import Dict, Any
 import argparse
 
 import networkx as nx
@@ -97,7 +96,7 @@ def run_pipeline(input_path: str, output_path: str) -> None:
                 "edge_count": nx_graph.number_of_edges(),
                 "num_weakly_connected_components": len(components),
                 "largest_component_size": max((len(c) for c in components), default=0),
-                "top_nodes_by_centrality": sorted(centrality, key=centrality.get, reverse=True)[:3] if centrality else [],
+                "top_nodes_by_centrality": sorted(centrality, key=lambda n: centrality.get(n, 0.0), reverse=True)[:3] if centrality else [],
             }
             logging.info(f"Graph analytics: {graph_metrics}")
 
