@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spyware-accountability-framework"
+version = "0.1.0"
+description = "A defensive, human-rights-aligned framework for detecting and mapping mercenary spyware infrastructure."
+readme = "README.md"
+authors = [
+    { name = "Don Michael Feeney Jr.", email = "dfeen87@example.com" }
+]
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+keywords = ["defensive", "accountability", "spyware", "osint", "forensics"]
+dependencies = [
+    "pydantic>=2.0",
+    "networkx>=3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "mypy>=1.0",
+    "ruff>=0.1",
+    "black>=23.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/spyware-accountability-framework"
+
+[tool.setuptools.packages.find]
+include = ["ailee_core*", "pipelines*"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.pytest.ini_options]
+addopts = "-v --tb=short"
+testpaths = ["tests"]
