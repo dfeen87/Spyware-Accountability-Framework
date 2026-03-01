@@ -1,0 +1,15 @@
+{
+  "nodes": [
+    {"id": "v-001", "label": "Apex Security Holdings", "type": "Vendor"},
+    {"id": "h-001", "label": "Bulletproof Hosting Inc.", "type": "Infrastructure"},
+    {"id": "d-001", "label": "api.auth.example-spyware.xyz", "type": "Domain"},
+    {"id": "j-001", "label": "suspicious_jurisdiction", "type": "Jurisdiction"}
+  ],
+  "edges": [
+    {"source": "v-001", "target": "h-001", "label": "HOSTS_WITH"},
+    {"source": "v-001", "target": "d-001", "label": "OWNS_DOMAIN"},
+    {"source": "d-001", "target": "h-001", "label": "RESOLVES_TO"},
+    {"source": "v-001", "target": "j-001", "label": "REGISTERED_IN"}
+  ],
+  "is_synthetic_dataset": true
+}
