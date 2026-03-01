@@ -61,11 +61,7 @@ class TestLLMBackendLiveAPI:
         mock_resp.__exit__ = MagicMock(return_value=False)
 
         with patch("urllib.request.urlopen", return_value=mock_resp):
-            # Re-import to pick up env var changes
-            import importlib
-            import ailee_core.backends.llm_backend as llm_mod
-            importlib.reload(llm_mod)
-            backend = llm_mod.LLMBackend()
+            backend = LLMBackend()
             result = backend.analyze({"vendors": [{"name": "EvilCorp"}]})
 
         assert result.classification_label == "HIGH_RISK_VENDOR"
@@ -78,10 +74,7 @@ class TestLLMBackendLiveAPI:
 
         import urllib.error
         with patch("urllib.request.urlopen", side_effect=urllib.error.URLError("connection refused")):
-            import importlib
-            import ailee_core.backends.llm_backend as llm_mod
-            importlib.reload(llm_mod)
-            backend = llm_mod.LLMBackend()
+            backend = LLMBackend()
             result = backend.analyze({"vendors": [{"name": "example-spyware corp"}]})
 
         # Should fall back to stub logic
@@ -128,10 +121,7 @@ class TestClassifierBackendLiveAPI:
         mock_resp.__exit__ = MagicMock(return_value=False)
 
         with patch("urllib.request.urlopen", return_value=mock_resp):
-            import importlib
-            import ailee_core.backends.classifier_backend as cls_mod
-            importlib.reload(cls_mod)
-            backend = cls_mod.ClassifierBackend()
+            backend = ClassifierBackend()
             result = backend.analyze({"tls_fingerprint": "abc123"})
 
         assert result.classification_label == "SUSPICIOUS_BEACON"
@@ -144,10 +134,7 @@ class TestClassifierBackendLiveAPI:
 
         import urllib.error
         with patch("urllib.request.urlopen", side_effect=urllib.error.URLError("refused")):
-            import importlib
-            import ailee_core.backends.classifier_backend as cls_mod
-            importlib.reload(cls_mod)
-            backend = cls_mod.ClassifierBackend()
+            backend = ClassifierBackend()
             result = backend.analyze({"tls_fingerprint": "abc"})
 
         assert result.classification_label == "SUSPICIOUS_BEACON"

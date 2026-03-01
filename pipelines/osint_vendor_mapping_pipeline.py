@@ -75,10 +75,10 @@ def run_pipeline(input_path: str, output_path: str) -> None:
 
         # Support v2 additional domains entity
         for dom in data.get("domains", []):
-            d_id = f"d-{dom['domain']}"
+            d_id = f"d-{dom.get('domain', 'unknown')}"
             if not any(n["id"] == d_id for n in graph_nodes):
-                nx_graph.add_node(d_id, label=dom["domain"], type="Domain")
-                graph_nodes.append({"id": d_id, "label": dom["domain"], "type": "Domain"})
+                nx_graph.add_node(d_id, label=dom.get("domain", "unknown"), type="Domain")
+                graph_nodes.append({"id": d_id, "label": dom.get("domain", "unknown"), "type": "Domain"})
             if "registered_by" in dom:
                 nx_graph.add_edge(dom["registered_by"], d_id, relationship="OWNS_DOMAIN")
                 graph_edges.append({"source": dom["registered_by"], "target": d_id, "label": "OWNS_DOMAIN"})

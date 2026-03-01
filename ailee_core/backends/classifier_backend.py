@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 #   CLASSIFIER_API_URL - Endpoint accepting a JSON POST with network features
 #                        and returning a JSON AnalysisResult payload
 #   CLASSIFIER_API_KEY - Bearer token / API key for the endpoint
-_CLASSIFIER_API_URL = os.environ.get("CLASSIFIER_API_URL", "")
-_CLASSIFIER_API_KEY = os.environ.get("CLASSIFIER_API_KEY", "")
+# These are read at call time (not import time) so that runtime environment
+# changes and test monkeypatching take effect without reloading the module.
 
 
 def _call_live_classifier(input_data: Dict[str, Any]) -> Optional[AnalysisResult]:
@@ -26,16 +26,18 @@ def _call_live_classifier(input_data: Dict[str, Any]) -> Optional[AnalysisResult
 
     Returns None on failure so the caller can fall back to stub logic.
     """
-    if not _CLASSIFIER_API_URL or not _CLASSIFIER_API_KEY:
+    classifier_api_url = os.environ.get("CLASSIFIER_API_URL", "")
+    classifier_api_key = os.environ.get("CLASSIFIER_API_KEY", "")
+    if not classifier_api_url or not classifier_api_key:
         return None
 
     body = json.dumps(input_data).encode("utf-8")
     req = urllib.request.Request(
-        url=_CLASSIFIER_API_URL,
+        url=classifier_api_url,
         data=body,
         headers={
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {_CLASSIFIER_API_KEY}",
+            "Authorization": f"Bearer {classifier_api_key}",
         },
         method="POST",
     )
