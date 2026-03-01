@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Dict, List
+from typing import Dict, List, Optional
 import argparse
 import requests
 from requests.exceptions import RequestException
@@ -11,7 +11,7 @@ from ailee_core.privacy import redact_pii
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-def run_pipeline(input_path: str, output_path: str, webhook_url: str = None) -> None:
+def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] = None) -> None:
     """
     Executes the Network Forensics Pipeline on synthetic or pre-processed network telemetry.
 
