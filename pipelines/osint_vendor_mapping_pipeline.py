@@ -52,9 +52,9 @@ def run_pipeline(input_path: str, output_path: str) -> None:
         graph_edges = []
 
         for vendor in data.get("vendors", []):
-            vid = vendor["id"]
-            nx_graph.add_node(vid, label=vendor["name"], type="Vendor")
-            graph_nodes.append({"id": vid, "label": vendor["name"], "type": "Vendor"})
+            vid = vendor.get("id", vendor.get("name", "unknown_vendor"))
+            nx_graph.add_node(vid, label=vendor.get("name", vid), type="Vendor")
+            graph_nodes.append({"id": vid, "label": vendor.get("name", vid), "type": "Vendor"})
             if "jurisdiction" in vendor:
                 j_id = f"j-{vendor['jurisdiction']}"
                 if not any(n["id"] == j_id for n in graph_nodes):
@@ -64,12 +64,12 @@ def run_pipeline(input_path: str, output_path: str) -> None:
                 graph_edges.append({"source": vid, "target": j_id, "label": "REGISTERED_IN"})
 
         for host in data.get("hosting_providers", []):
-            hid = host["id"]
-            nx_graph.add_node(hid, label=host["name"], type="Infrastructure")
-            graph_nodes.append({"id": hid, "label": host["name"], "type": "Infrastructure"})
+            hid = host.get("id", host.get("name", "unknown_host"))
+            nx_graph.add_node(hid, label=host.get("name", hid), type="Infrastructure")
+            graph_nodes.append({"id": hid, "label": host.get("name", hid), "type": "Infrastructure"})
             # Link vendors to the infrastructure they use
             for vendor in data.get("vendors", []):
-                vid = vendor["id"]
+                vid = vendor.get("id", vendor.get("name", "unknown_vendor"))
                 nx_graph.add_edge(vid, hid, relationship="HOSTS_WITH")
                 graph_edges.append({"source": vid, "target": hid, "label": "HOSTS_WITH"})
 
