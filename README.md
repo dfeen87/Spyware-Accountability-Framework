@@ -15,13 +15,15 @@ A **defensive, human-rights-aligned framework** that uses AILEE (Adaptive Integr
 
 ## ⚙️ Core Components
 
-1. **AILEE Analysis Interfaces:** Stubs and interfaces for integrating AI/ML models to classify and risk-score forensic artifacts and OSINT.
+1. **AILEE Analysis Interfaces:** Interfaces for integrating AI/ML models to classify and risk-score forensic artifacts and OSINT, with live API backends configurable via environment variables (v3).
 2. **Pipelines:** Configurable, reproducible pipelines for:
    - Network Forensics
-   - OSINT Vendor Mapping
+   - OSINT Vendor Mapping (with NetworkX graph analytics in v3)
    - Reporting and Brief Generation
-3. **Rulesets:** Example, synthetic rules (YARA, Sigma, Suricata) demonstrating how to construct defensive signatures safely.
-4. **Governance:** Strict guidelines and checklists to ensure contributions remain aligned with human rights and defensive purposes.
+3. **Privacy Overlays:** `ailee_core/privacy` provides PII redaction, differential privacy, and pseudonymization integrated into all ingestion pipelines (v3).
+4. **Reputation Network:** `ailee_core/reputation` provides a federated, HMAC-signed reputation query interface for sharing intelligence between trusted NGO partners (v3).
+5. **Rulesets:** Example, synthetic rules (YARA, Sigma, Suricata) demonstrating how to construct defensive signatures safely.
+6. **Governance:** Strict guidelines and checklists to ensure contributions remain aligned with human rights and defensive purposes.
 
 ## 🚀 Quickstart
 
@@ -48,12 +50,11 @@ python -m pipelines.network_forensics_pipeline --input examples/synthetic_networ
 
 ## 🧠 AILEE Integration
 
-Currently, the `ailee_core` module contains *stubs* and *interfaces*. It models the AILEE architecture (Layering, Policy, and Trust Evaluation) to demonstrate how a production system would:
-1. Ingest normalized data.
-2. Consult AI models for risk/classification scores.
+The `ailee_core` module implements the AILEE architecture (Layering, Policy, and Trust Evaluation):
+1. Ingest normalized data (with PII redaction applied at the boundary).
+2. Consult AI models for risk/classification scores — using live API backends when configured, or deterministic stubs otherwise.
 3. Apply rigorous policy and trust thresholds before acting on those scores.
-
-In a future version, real AILEE-backed models could be swapped into these interfaces to perform live analysis.
+4. Optionally enrich results with federated reputation data from trusted NGO peers.
 
 ## 👥 Audience
 
@@ -63,13 +64,22 @@ This tool is built for:
 - **Security Researchers**
 - **Network Defenders**
 
-## 🗺️ Roadmap to v2
+## 🗺️ Roadmap
 
-1. **Pluggable AILEE Backends:** Implement real model bindings for the `ailee_core` interfaces (e.g., integrating an LLM or specialized classifier for OSINT data).
-2. **Expanded Synthetic Datasets:** Create richer, more complex synthetic datasets for training and testing analytical workflows.
-3. **Automated Threat Briefings:** Enhance the reporting pipeline to generate publish-ready markdown briefs with visualization of graph data.
-4. **CI/CD for Rulesets:** Implement automated validation and linting for community-contributed YARA/Sigma rules.
-5. **Community Governance Board:** Establish a formal review process and board for handling sensitive data requests and reviewing major framework changes.
+### ✅ v3 (Current)
+
+1. **Live AI Model Integration:** Pluggable live API backends for `LLMBackend` and `ClassifierBackend`, configurable via `LLM_API_URL`/`LLM_API_KEY` and `CLASSIFIER_API_URL`/`CLASSIFIER_API_KEY` env vars. Falls back gracefully to deterministic stub logic when env vars are unset.
+2. **Advanced Graph Analytics:** `OSINTSemanticBackend` and the OSINT pipeline now build real `networkx.DiGraph` objects and compute degree-centrality metrics to identify highly connected nodes in mercenary ecosystems.
+3. **Enhanced Data Privacy Overlays:** New `ailee_core/privacy` module provides PII redaction (`redact_pii`), Laplace differential privacy (`apply_differential_privacy`), and HMAC-based pseudonymization. Both ingestion pipelines call `redact_pii` before any analysis.
+4. **Decentralized Reputation Networks:** New `ailee_core/reputation` module implements HMAC-SHA256-signed federated queries to trusted NGO peers, with graceful degradation when no peers are configured.
+
+### v2 (Completed)
+
+1. **Pluggable AILEE Backends:** Implemented three stubbed backends (`llm_backend.py`, `classifier_backend.py`, `osint_semantic_backend.py`).
+2. **Expanded Synthetic Datasets:** Created richer v2 datasets in `synthetic_data/`.
+3. **Automated Threat Briefings:** Enhanced the reporting pipeline to generate Markdown briefs with graph visualization.
+4. **CI/CD for Rulesets:** Automated YARA/Sigma/Suricata validation in CI.
+5. **Community Governance Board:** Formalized review processes in `governance/v2/`.
 
 ## 📜 License
 
