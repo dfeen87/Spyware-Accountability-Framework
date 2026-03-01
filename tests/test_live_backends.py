@@ -70,8 +70,7 @@ class TestLLMBackendLiveAPI:
 
         assert result.classification_label == "HIGH_RISK_VENDOR"
         assert result.confidence_score == pytest.approx(0.91)
-        assert result.metadata["backend"] == "classifier_backend_live" or \
-               result.metadata.get("backend") in ("llm_backend_live", "llm_backend_stub")
+        assert result.metadata.get("backend") == "llm_backend_live"
 
     def test_live_api_failure_falls_back_to_stub(self, monkeypatch):
         monkeypatch.setenv("LLM_API_URL", "https://api.example.com/v1/chat/completions")
