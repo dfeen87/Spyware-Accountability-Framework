@@ -3,7 +3,7 @@ rule synthetic_spyware_example : mercenary_infrastructure {
         description = "SYNTHETIC EXAMPLE: Detects characteristics of a mock mercenary spyware loader."
         author = "Spyware Accountability Framework"
         date = "2024-03-01"
-        reference = "https://github.com/your-org/spyware-accountability-framework"
+        reference = "https://github.com/dfeen87/spyware-accountability-framework"
         warning = "THIS IS A SYNTHETIC RULE. DO NOT DEPLOY EXPECTING REAL DETECTIONS."
         version = "1.0"
 
