@@ -33,7 +33,7 @@ Before you contribute, please understand that this is a **DEFENSIVE ONLY** frame
 ## 🧑‍💻 Development Setup
 
 ```bash
-git clone https://github.com/your-org/spyware-accountability-framework.git
+git clone https://github.com/dfeen87/spyware-accountability-framework.git
 cd spyware-accountability-framework
 pip install -e .[dev]
 pytest tests/
