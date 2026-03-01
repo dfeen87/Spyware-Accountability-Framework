@@ -3,7 +3,7 @@ import os
 from unittest.mock import patch
 from requests.exceptions import RequestException
 
-from pipelines.network_forensics_pipeline import run_pipeline
+from pipelines.network_forensics_pipeline import run_pipeline, extract_features_from_markdown
 
 def test_network_forensics_pipeline_malicious_input(tmp_path):
     """
@@ -139,3 +139,30 @@ def test_network_forensics_pipeline_webhook_not_actionable(mock_post, tmp_path):
 
     mock_post.assert_not_called()
     assert os.path.exists(output_file)
+
+
+def test_extract_features_from_markdown_strips_punctuation():
+    """
+    Tests that extract_features_from_markdown correctly extracts domains and
+    TLS fingerprints even when they are followed by punctuation (commas, periods,
+    quotes) in markdown prose — a common real-world formatting pattern.
+    """
+    content = (
+        "The malware contacted malicious.com, and also update.example-spyware.xyz, "
+        "using TLS fingerprint e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855."
+    )
+    result = extract_features_from_markdown(content)
+    assert "malicious.com" in result["domains"]
+    assert "update.example-spyware.xyz" in result["domains"]
+    assert "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" in result["tls_fingerprints"]
+
+
+def test_extract_features_from_markdown_clean_words():
+    """
+    Tests that extraction also works on words without any trailing punctuation
+    (to ensure the strip-first approach doesn't break the baseline case).
+    """
+    content = "Observed beacon to c2.example-spyware.xyz and normal.com"
+    result = extract_features_from_markdown(content)
+    assert "c2.example-spyware.xyz" in result["domains"]
+    assert "normal.com" in result["domains"]

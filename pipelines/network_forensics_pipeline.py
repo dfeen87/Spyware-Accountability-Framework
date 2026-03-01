@@ -109,10 +109,11 @@ def extract_features_from_markdown(content: str) -> Dict[str, List[str]]:
 
     # Simple regex or string matching simulation
     for word in content.split():
-        if word.endswith(".xyz") or word.endswith(".com"):
-            domains.append(word.strip("`.,\"'()"))
-        elif len(word) == 64 and all(c in "0123456789abcdef" for c in word.lower()):
-            tls_fingerprints.append(word)
+        stripped = word.strip("`.,\"'()")
+        if stripped.endswith(".xyz") or stripped.endswith(".com"):
+            domains.append(stripped)
+        elif len(stripped) == 64 and all(c in "0123456789abcdef" for c in stripped.lower()):
+            tls_fingerprints.append(stripped)
 
     return {"domains": domains, "tls_fingerprints": tls_fingerprints}
 
