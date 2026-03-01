@@ -20,7 +20,8 @@ For the purposes of this repository, abuse occurs when the framework or its prov
 If you identify abuse, or discover real victim PII in this repository:
 
 1. **DO NOT CREATE A PUBLIC ISSUE.**
-2. Send an email immediately to `security@your-org.com`.
+2. Open a **private** vulnerability report at:
+   <https://github.com/dfeen87/Spyware-Accountability-Framework/security/advisories/new>
 
 Include:
 - The URL of the specific file, commit, or PR in question.

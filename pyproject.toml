@@ -8,7 +8,7 @@ version = "3.0.0"
 description = "A defensive, human-rights-aligned framework for detecting and mapping mercenary spyware infrastructure."
 readme = "README.md"
 authors = [
-    { name = "Don Michael Feeney Jr.", email = "dfeen87@example.com" }
+    { name = "Don Michael Feeney Jr.", email = "dfeen87@users.noreply.github.com" }
 ]
 license = { file = "LICENSE" }
 classifiers = [
@@ -36,7 +36,7 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-org/spyware-accountability-framework"
+Homepage = "https://github.com/dfeen87/Spyware-Accountability-Framework"
 
 [tool.setuptools.packages.find]
 include = ["ailee_core*", "pipelines*"]

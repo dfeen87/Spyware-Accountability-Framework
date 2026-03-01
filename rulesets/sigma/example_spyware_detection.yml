@@ -5,7 +5,7 @@ description: |
   SYNTHETIC EXAMPLE: Detects characteristics of a mock mercenary spyware loader execution.
   This rule is meant to demonstrate how to map behavior, not provide live detection logic.
 references:
-  - https://github.com/your-org/spyware-accountability-framework
+  - https://github.com/dfeen87/Spyware-Accountability-Framework
 author: Spyware Accountability Framework
 date: 2024-03-01
 tags:
