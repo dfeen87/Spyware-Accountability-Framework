@@ -216,9 +216,10 @@ When these variables are unset, the framework falls back to deterministic stub l
 
 ## Acknowledgements
 
-Repository scaffolding, code structure, and documentation were developed with assistance from Google’s Jules Pro.
-Final repository review prior to the v3.0.0 release was supported by Anthropic’s Claude (Sonnet 4.6).
-README updates and ongoing improvements are assisted by GitHub Copilot.
+R## Acknowledgments
+
+This project was developed with a combination of original ideas, hands‑on coding, and support from advanced AI systems. I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **Google Jules** for their meaningful assistance in refining concepts, improving clarity, and strengthening the overall quality of this work.
+
 
 ---
 
