@@ -1,0 +1,31 @@
+{
+  "dataset_description": "SYNTHETIC EXAMPLES: A mock dataset showing corporate linkages to mercenary infrastructure.",
+  "vendors": [
+    {
+      "id": "v-1001",
+      "name": "FakeSpywareCorp LLC",
+      "jurisdiction": "Offshore Haven A",
+      "known_aliases": ["InvisibleTech Solutions"]
+    },
+    {
+      "id": "v-1002",
+      "name": "Legit-Looking Telecom Analysis Inc",
+      "jurisdiction": "Europe",
+      "known_aliases": []
+    }
+  ],
+  "hosting_providers": [
+    {
+      "id": "h-2001",
+      "name": "BulletproofHosting Example",
+      "asn": "AS64496",
+      "jurisdiction": "Offshore Haven B"
+    },
+    {
+      "id": "h-2002",
+      "name": "Standard Cloud Provider",
+      "asn": "AS64497",
+      "jurisdiction": "US"
+    }
+  ]
+}

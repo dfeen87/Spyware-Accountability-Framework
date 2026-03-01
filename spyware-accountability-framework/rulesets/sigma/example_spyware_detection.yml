@@ -1,0 +1,39 @@
+title: Synthetic Mercenary Activity Detection
+id: f1a2b3c4-5d6e-7f8a-9b0c-1d2e3f4a5b6c
+status: experimental
+description: |
+  SYNTHETIC EXAMPLE: Detects characteristics of a mock mercenary spyware loader execution.
+  This rule is meant to demonstrate how to map behavior, not provide live detection logic.
+references:
+  - https://github.com/your-org/spyware-accountability-framework
+author: Spyware Accountability Framework
+date: 2024-03-01
+tags:
+  - attack.defense_evasion
+  - attack.command_and_control
+  - example.synthetic
+
+logsource:
+  product: windows
+  category: process_creation
+
+detection:
+  selection:
+    # A fake process name and argument indicative of an obfuscation or injection attempt
+    Image|endswith: '\svchost.exe'
+    CommandLine|contains:
+      - '-k LocalServiceNetworkRestricted -s FakeSpywareService'
+
+  # A secondary filter looking for anomalous network connections to mock IP spaces
+  network_selection:
+    DestinationIp|startswith:
+      - '192.0.2.'
+      - '198.51.100.'
+      - '203.0.113.'
+
+  condition: selection and network_selection
+
+falsepositives:
+  - This is a synthetic rule. It should not fire in production environments.
+
+level: critical
