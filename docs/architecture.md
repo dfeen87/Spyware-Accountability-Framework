@@ -25,5 +25,16 @@ This is the heart of our integration with the AILEE philosophy. We do not trust 
 - **AnalysisResult**: Every result returned by the core must include not just a label, but a `confidence_score`, an overall `risk_score`, and an `explanation`.
 - **Policy Enforcement**: (Future) Models are gated by strict policies. If a model detects a malicious artifact but its confidence is below 0.85, the AILEE layer flags it for human review rather than blindly generating an alert.
 
+#### Pluggable AILEE Backends
+
+The `ailee_core/backends/` directory contains modular implementations of the `Analyzer` interfaces. This pluggable architecture allows researchers and defenders to swap out underlying analytical models via configuration (e.g., `config["backend"] = "llm"`), depending on their operational needs and available infrastructure.
+
+Current backend stubs (which use deterministic, defensive placeholder logic) include:
+- **`llm_backend.py`**: Simulates querying a Large Language Model to perform complex semantic analysis and context extraction from unstructured OSINT.
+- **`classifier_backend.py`**: Simulates a dedicated Machine Learning model trained to detect C2 beaconing and spyware-like network patterns in structured telemetry.
+- **`osint_semantic_backend.py`**: Simulates a graph database or reasoning engine to evaluate risk based on complex relationship networks (e.g., entity proximity to known malicious actors).
+
+These backends ensure that the AI decision-making layer is transparent and fully configurable, with each backend producing the standardized `AnalysisResult` for governance policy evaluation.
+
 ### 3. `rulesets/` (The Defensive Artifacts)
 Our end goal is to output actionable defense. We maintain examples of YARA, Sigma, and Suricata rules. Currently, these contain *synthetic* examples to demonstrate structure without releasing live, usable indicators that could be misused or tip off adversaries.

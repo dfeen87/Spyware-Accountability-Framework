@@ -23,6 +23,18 @@ def run_pipeline(input_path: str, output_path: str) -> None:
         with open(input_path, 'r') as f:
             if input_path.endswith('.json'):
                 data = json.load(f)
+
+                # Check if it's the v2 format with a list of flows
+                if "flows" in data:
+                    domains = []
+                    tls_fingerprints = []
+                    for flow in data["flows"]:
+                        if "sni_domain" in flow:
+                            domains.append(flow["sni_domain"])
+                        if "tls_fingerprint" in flow:
+                            tls_fingerprints.append(flow["tls_fingerprint"])
+                    data["domains"] = domains
+                    data["tls_fingerprints"] = tls_fingerprints
             else:
                 # For Markdown descriptions or other structured text, we simulate
                 # an extraction step by creating a mock structured payload based on keywords.

@@ -9,7 +9,8 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 def generate_brief(network_data: Dict[str, Any], osint_data: Dict[str, Any], output_path: str) -> None:
     """
-    Generates a human-readable Markdown brief summarizing the AILEE-vetted findings.
+    Generates a human-readable Markdown brief summarizing the AILEE-vetted findings
+    using the v2 automated threat briefing template.
     """
     logging.info(f"Generating defensive intelligence brief...")
 
@@ -17,44 +18,56 @@ def generate_brief(network_data: Dict[str, Any], osint_data: Dict[str, Any], out
     if network_data.get("status") != "ACTIONABLE" or osint_data.get("status") != "ACTIONABLE":
         status_msg = "Draft Intelligence Brief: Human Review Required"
 
-    brief_content = f"""# 🛡️ Defensive Intelligence Brief
-
-**Status:** {status_msg}
-
-## 1. Executive Summary
-This report aggregates findings from network telemetry and OSINT vendor mapping. The infrastructure profiled here exhibits characteristics of mercenary spyware operations.
-
-**Confidence levels:**
-- Network Indicators: {network_data.get('findings', {}).get('confidence_score', 'N/A')}
-- Vendor Attribution: {osint_data.get('findings', {}).get('confidence_score', 'N/A')}
-
-## 2. Infrastructure Details
-The network forensic pipeline flagged the following domains or fingerprints as highly suspicious.
-"""
-
     # List IOCs from network findings
     iocs = network_data.get("extracted_iocs", [])
+    iocs_list = ""
     if iocs:
         for ioc in iocs:
-            brief_content += f"- `{ioc}`\n"
+            iocs_list += f"- `{ioc}`\n"
     else:
-        brief_content += "\nNo verifiable IOCs extracted or AILEE trust threshold not met.\n"
+        iocs_list = "No verifiable IOCs extracted or AILEE trust threshold not met.\n"
 
-    brief_content += "\n## 3. Vendor Ecosystem Graph\n"
-
-    # Summarize graph data
+    # Summarize graph data (ASCII representation/JSON dump)
     graph = osint_data.get("graph", {})
+    infrastructure_graph = ""
     if graph:
         nodes = graph.get("nodes", [])
-        for node in nodes:
-            brief_content += f"- Entity: {node.get('label')} (Type: {node.get('type')})\n"
+        edges = graph.get("edges", [])
+        infrastructure_graph += "```json\n"
+        infrastructure_graph += json.dumps(graph, indent=2)
+        infrastructure_graph += "\n```\n\n**Visual Summary:**\n"
+        for edge in edges:
+            source = next((n['label'] for n in nodes if n['id'] == edge['source']), edge['source'])
+            target = next((n['label'] for n in nodes if n['id'] == edge['target']), edge['target'])
+            infrastructure_graph += f"- [{source}] --({edge['label']})--> [{target}]\n"
     else:
-         brief_content += "\nNo verifiable vendor structures found or AILEE trust threshold not met.\n"
+         infrastructure_graph = "No verifiable vendor structures found or AILEE trust threshold not met.\n"
 
-    brief_content += "\n## 4. Methodological Note & Limitations\n"
-    brief_content += "This brief is generated automatically by the Spyware Accountability Framework. "
-    brief_content += "It relies on synthetic examples or user-provided inputs evaluated by the AILEE layer. "
-    brief_content += "Always confirm findings via human analysis before taking defensive action or attributing attacks."
+    # Read template
+    template_path = "reports/templates/brief_template.md"
+    try:
+        with open(template_path, 'r') as f:
+            template = f.read()
+    except FileNotFoundError:
+        logging.error(f"Template not found at {template_path}. Ensure you are running from repo root.")
+        return
+
+    # Replace placeholders
+    brief_content = template
+    brief_content = brief_content.replace("{{ status_msg }}", status_msg)
+
+    net_findings = network_data.get('findings', {})
+    brief_content = brief_content.replace("{{ network_confidence }}", str(net_findings.get('confidence_score', 'N/A')))
+    brief_content = brief_content.replace("{{ network_risk }}", str(net_findings.get('risk_score', 'N/A')))
+    brief_content = brief_content.replace("{{ network_classification }}", str(net_findings.get('classification_label', 'N/A')))
+
+    osint_findings = osint_data.get('findings', {})
+    brief_content = brief_content.replace("{{ osint_confidence }}", str(osint_findings.get('confidence_score', 'N/A')))
+    brief_content = brief_content.replace("{{ osint_risk }}", str(osint_findings.get('risk_score', 'N/A')))
+    brief_content = brief_content.replace("{{ osint_classification }}", str(osint_findings.get('classification_label', 'N/A')))
+
+    brief_content = brief_content.replace("{{ iocs_list }}", iocs_list)
+    brief_content = brief_content.replace("{{ infrastructure_graph }}", infrastructure_graph)
 
     with open(f"{output_path}/defensive_brief.md", 'w') as f:
         f.write(brief_content)

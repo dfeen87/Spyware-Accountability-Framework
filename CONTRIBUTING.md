@@ -23,8 +23,12 @@ Before you contribute, please understand that this is a **DEFENSIVE ONLY** frame
 2. **Open an Issue:** Before writing code, open an issue to discuss your proposed changes. This helps ensure alignment with our strict defensive goals.
 3. **Branch & Commit:** Create a branch for your work. Ensure your commits are descriptive.
 4. **Use Synthetic Data:** Ensure any tests or examples you provide use purely synthetic data.
-5. **Open a PR:** Open a Pull Request referencing the issue. Ensure all CI checks and tests pass.
-6. **Review:** Maintainers will review the PR not just for code quality, but for adherence to our human-rights and defensive-only policies.
+5. **Ruleset Submissions:** If you are contributing to `rulesets/`, your rules must pass automated CI validation.
+    - Rules must contain explicit `synthetic` or `example` markers.
+    - Real IP addresses outside of reserved example ranges (e.g., `192.0.2.x`) are prohibited.
+    - Ensure your files are formatted correctly for their respective language (YARA, Sigma, Suricata).
+6. **Open a PR:** Open a Pull Request referencing the issue. Ensure all CI checks (including `Ruleset CI`) and tests pass.
+7. **Review:** Maintainers will review the PR not just for code quality, but for adherence to our human-rights and defensive-only policies.
 
 ## 🧑‍💻 Development Setup
 

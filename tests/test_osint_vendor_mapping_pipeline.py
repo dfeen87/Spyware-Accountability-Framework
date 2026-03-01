@@ -47,10 +47,13 @@ def test_osint_vendor_mapping_pipeline_malicious_input(tmp_path):
     graph = report["graph"]
     assert "nodes" in graph
     assert "edges" in graph
-    assert len(graph["nodes"]) == 2  # One vendor, one host
-    assert len(graph["edges"]) == 1  # Link between them
-    assert graph["edges"][0]["source"] == "v-1001"
-    assert graph["edges"][0]["target"] == "h-2001"
+    assert len(graph["nodes"]) == 3  # One vendor, one jurisdiction, one host
+    assert len(graph["edges"]) == 2  # Two relationships
+
+    # Check edges
+    targets = [e["target"] for e in graph["edges"]]
+    assert "h-2001" in targets
+    assert "j-Offshore Haven A" in targets
 
 
 def test_osint_vendor_mapping_pipeline_benign_input(tmp_path):

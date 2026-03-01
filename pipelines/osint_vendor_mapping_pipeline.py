@@ -47,12 +47,27 @@ def run_pipeline(input_path: str, output_path: str) -> None:
 
         for vendor in data.get("vendors", []):
             graph_nodes.append({"id": vendor["id"], "label": vendor["name"], "type": "Vendor"})
+            if "jurisdiction" in vendor:
+                j_id = f"j-{vendor['jurisdiction']}"
+                if not any(n["id"] == j_id for n in graph_nodes):
+                    graph_nodes.append({"id": j_id, "label": vendor["jurisdiction"], "type": "Jurisdiction"})
+                graph_edges.append({"source": vendor["id"], "target": j_id, "label": "REGISTERED_IN"})
 
         for host in data.get("hosting_providers", []):
             graph_nodes.append({"id": host["id"], "label": host["name"], "type": "Infrastructure"})
             # Link vendors to the infrastructure they use
             for vendor in data.get("vendors", []):
                  graph_edges.append({"source": vendor["id"], "target": host["id"], "label": "HOSTS_WITH"})
+
+        # Support v2 additional domains entity
+        for dom in data.get("domains", []):
+            d_id = f"d-{dom['domain']}"
+            if not any(n["id"] == d_id for n in graph_nodes):
+                graph_nodes.append({"id": d_id, "label": dom["domain"], "type": "Domain"})
+            if "registered_by" in dom:
+                graph_edges.append({"source": dom["registered_by"], "target": d_id, "label": "OWNS_DOMAIN"})
+            if "hosted_on" in dom:
+                graph_edges.append({"source": d_id, "target": dom["hosted_on"], "label": "RESOLVES_TO"})
 
         report = {
             "status": "ACTIONABLE",

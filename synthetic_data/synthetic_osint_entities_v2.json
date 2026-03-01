@@ -1,0 +1,47 @@
+{
+  "vendors": [
+    {
+      "id": "v-001",
+      "name": "Apex Security Holdings",
+      "jurisdiction": "suspicious_jurisdiction",
+      "status": "active",
+      "is_synthetic": true
+    },
+    {
+      "id": "v-002",
+      "name": "Global Surveillance Technologies",
+      "jurisdiction": "example_jurisdiction_b",
+      "status": "dormant",
+      "is_synthetic": true
+    }
+  ],
+  "hosting_providers": [
+    {
+      "id": "h-001",
+      "name": "Bulletproof Hosting Inc.",
+      "country": "example_country_1",
+      "is_synthetic": true
+    },
+    {
+      "id": "h-002",
+      "name": "Cloud Infra LLC",
+      "country": "example_country_2",
+      "is_synthetic": true
+    }
+  ],
+  "domains": [
+    {
+      "domain": "api.auth.example-spyware.xyz",
+      "registered_by": "v-001",
+      "hosted_on": "h-001",
+      "is_synthetic": true
+    },
+    {
+      "domain": "update.sys.example-vendor.com",
+      "registered_by": "v-002",
+      "hosted_on": "h-002",
+      "is_synthetic": true
+    }
+  ],
+  "is_synthetic_dataset": true
+}

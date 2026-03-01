@@ -1,0 +1,39 @@
+{
+  "flows": [
+    {
+      "src_ip": "10.0.0.5",
+      "dst_ip": "192.0.2.14",
+      "dst_port": 443,
+      "protocol": "TCP",
+      "sni_domain": "api.auth.example-spyware.xyz",
+      "tls_fingerprint": "1f8e134b2c019d675317767425ba12f32a2455f52a8a5b6c738e412e12891d4e",
+      "bytes_sent": 128,
+      "bytes_recv": 512,
+      "timing_interval_ms": 300000,
+      "is_synthetic": true
+    },
+    {
+      "src_ip": "10.0.0.8",
+      "dst_ip": "198.51.100.88",
+      "dst_port": 443,
+      "protocol": "TCP",
+      "sni_domain": "update.sys.example-vendor.com",
+      "tls_fingerprint": "8b5f3a1e2f3d4c5b6a79889706152433445566778899aabbccddeeff00112233",
+      "bytes_sent": 5000,
+      "bytes_recv": 200,
+      "timing_interval_ms": 15000,
+      "is_synthetic": true
+    },
+    {
+      "src_ip": "10.0.0.12",
+      "dst_ip": "203.0.113.5",
+      "dst_port": 80,
+      "protocol": "TCP",
+      "http_host": "legitimate-example-service.org",
+      "bytes_sent": 800,
+      "bytes_recv": 12000,
+      "timing_interval_ms": 0,
+      "is_synthetic": true
+    }
+  ]
+}
