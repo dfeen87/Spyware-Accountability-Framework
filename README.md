@@ -1,6 +1,8 @@
 # Spyware Accountability Framework
 
 [![CI](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml)
+[![Ruleset CI](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ruleset-ci.yml/badge.svg)](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ruleset-ci.yml)
+[![Version](https://img.shields.io/badge/version-3.0.0-informational.svg)](CITATION.cff)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -42,38 +44,83 @@ A **defensive, human-rights-aligned framework** that uses AILEE (Adaptive Integr
 Spyware-Accountability-Framework/
 ├── .github/
 │   └── workflows/
-│       ├── ci.yml                      # Lint, type-check, and test on every push/PR
-│       └── ruleset-ci.yml              # YARA/Sigma/Suricata validation on ruleset changes
-├── ailee_core/                         # Core AILEE analysis engine
+│       ├── ci.yml                              # Lint, type-check, and test on every push/PR
+│       └── ruleset-ci.yml                      # YARA/Sigma/Suricata validation on ruleset changes
+├── ailee_core/                                 # Core AILEE analysis engine
 │   ├── backends/
-│   │   ├── classifier_backend.py       # Classifier API backend (live or stub)
-│   │   ├── llm_backend.py              # LLM API backend (live or stub)
-│   │   └── osint_semantic_backend.py   # OSINT graph analytics backend
-│   ├── interfaces.py                   # Abstract AILEE interfaces
-│   ├── models_stub.py                  # Deterministic stub model responses
-│   ├── privacy.py                      # PII redaction and differential privacy
-│   └── reputation.py                   # Federated HMAC-signed reputation network
+│   │   ├── classifier_backend.py               # Classifier API backend (live or stub)
+│   │   ├── llm_backend.py                      # LLM API backend (live or stub)
+│   │   └── osint_semantic_backend.py           # OSINT graph analytics backend
+│   ├── __init__.py
+│   ├── interfaces.py                           # Abstract AILEE interfaces
+│   ├── models_stub.py                          # Deterministic stub model responses
+│   ├── privacy.py                              # PII redaction and differential privacy
+│   └── reputation.py                           # Federated HMAC-signed reputation network
 ├── ci/
 │   └── ruleset_validation/
-│       ├── network_rule_validator.py   # Suricata rule validator
-│       ├── sigma_linter.py             # Sigma rule linter
-│       └── yara_linter.py              # YARA rule linter
-├── docs/                               # Architecture and usage documentation
-├── examples/                           # Synthetic datasets and usage notebooks
-├── governance/                         # Contribution policies and review checklists
-├── pipelines/                          # Runnable analysis pipelines
+│       ├── network_rule_validator.py           # Suricata rule validator
+│       ├── sigma_linter.py                     # Sigma rule linter
+│       └── yara_linter.py                      # YARA rule linter
+├── docs/                                       # Architecture and usage documentation
+│   ├── active_prevention_guidance.md
+│   ├── architecture.md
+│   ├── data-handling-and-privacy.md
+│   ├── ethics-and-governance.md
+│   ├── threat-model.md
+│   └── usage-overview.md
+├── examples/                                   # Synthetic datasets and usage notebooks
+│   ├── notebooks/
+│   │   └── exploratory_analysis.py            # Programmatic pipeline walkthrough
+│   ├── synthetic_network_capture_description.md
+│   └── synthetic_osint_dataset.json
+├── governance/                                 # Contribution policies and review checklists
+│   ├── v2/
+│   │   ├── governance_board_structure.md
+│   │   ├── major_change_review_process.md
+│   │   └── sensitive_data_request_policy.md
+│   ├── v3/
+│   │   └── v3_change_review.md
+│   ├── abuse-handling-policy.md
+│   └── release-review-checklist.md
+├── pipelines/                                  # Runnable analysis pipelines
+│   ├── __init__.py
 │   ├── network_forensics_pipeline.py
 │   ├── osint_vendor_mapping_pipeline.py
 │   └── reporting_pipeline.py
-├── reports/templates/                  # Report output templates
-├── rulesets/                           # Example detection rules (YARA, Sigma, Suricata)
-├── synthetic_data/                     # Synthetic datasets for testing
-├── tests/                              # Automated test suite
-├── pyproject.toml                      # Project metadata and tooling configuration
-├── VALIDATION.md                       # Simulations for this software
+├── reports/
+│   └── templates/
+│       └── brief_template.md                  # Report output template
+├── rulesets/                                   # Example detection rules (YARA, Sigma, Suricata)
+│   ├── network/
+│   │   └── example_suricata_rules.rules
+│   ├── sigma/
+│   │   └── example_spyware_detection.yml
+│   ├── yara/
+│   │   └── example_spyware_family.yar
+│   └── README.md
+├── synthetic_data/                             # Synthetic datasets for testing
+│   ├── synthetic_infrastructure_graph_v2.json
+│   ├── synthetic_network_flows_v2.json
+│   ├── synthetic_network_flows_v3.json
+│   ├── synthetic_osint_entities_v2.json
+│   ├── synthetic_osint_entities_v3.json
+│   └── README.md
+├── tests/                                      # Automated test suite (54 tests)
+│   ├── test_graph_analytics.py
+│   ├── test_live_backends.py
+│   ├── test_network_forensics_pipeline.py
+│   ├── test_osint_vendor_mapping_pipeline.py
+│   ├── test_privacy.py
+│   ├── test_reporting_pipeline.py
+│   └── test_reputation.py
+├── pyproject.toml                              # Project metadata and tooling configuration
+├── CITATION.cff                                # Citation metadata (CFF format)
+├── CODE_OF_CONDUCT.md
 ├── CONTRIBUTING.md
 ├── LICENSE
-└── SECURITY.md
+├── ROADMAP_V2_COMPLETION.md                    # v2 completion summary and v3 integration notes
+├── SECURITY.md
+└── VALIDATION.md                               # Full end-to-end simulation results
 ```
 
 ---
@@ -172,6 +219,29 @@ When these variables are unset, the framework falls back to deterministic stub l
 
 Repository scaffolding, code structure, and documentation were developed with assistance from Google’s Jules Pro.
 Final repository review prior to the v3.0.0 release was supported by Anthropic’s Claude (Sonnet 4.6).
+README updates and ongoing improvements are assisted by GitHub Copilot.
+
+---
+
+## Citing this Work
+
+If you use this framework in research or reports, please cite it using the metadata in [`CITATION.cff`](CITATION.cff):
+
+```bibtex
+@software{Feeney_Spyware_Accountability_Framework,
+  author  = {Feeney Jr., Don Michael},
+  title   = {Spyware Accountability Framework},
+  version = {3.0.0},
+  URL     = {https://github.com/dfeen87/Spyware-Accountability-Framework},
+  license = {MIT}
+}
+```
+
+---
+
+## Community & Code of Conduct
+
+All contributors and users are expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md). This project is governed by a strict defensive-only policy. For contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md). For security disclosures, see [SECURITY.md](SECURITY.md).
 
 ---
 
