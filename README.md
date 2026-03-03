@@ -3,7 +3,6 @@
 [![CI](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/badge/version-3.0.0-informational.svg)](CITATION.cff)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A **defensive, human-rights-aligned framework** that uses AILEE (Adaptive Integrity Layer for AI Decision Systems) as an analysis engine to:
 
@@ -249,4 +248,6 @@ All contributors and users are expected to follow our [Code of Conduct](CODE_OF_
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is available for **non‑commercial use only** under the terms of the included LICENSE file.  
+Commercial use requires a separate paid license.
+
