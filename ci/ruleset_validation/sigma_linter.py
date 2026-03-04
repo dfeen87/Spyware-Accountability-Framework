@@ -14,6 +14,10 @@ def lint_sigma(file_path: Path) -> bool:
         print(f"❌ {file_path} failed validation: Invalid YAML format - {e}")
         return False
 
+    if not isinstance(rule, dict):
+        print(f"❌ {file_path} failed validation: YAML did not parse to a mapping.")
+        return False
+
     errors = []
 
     # 1. Structural check

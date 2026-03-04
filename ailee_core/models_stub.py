@@ -1,6 +1,14 @@
 from typing import Any, Dict
 from ailee_core.interfaces import AnalysisResult, NetworkAnalyzer, OSINTAnalyzer
 
+_BENIGN_LABELS = frozenset({
+    "BENIGN_TRAFFIC",
+    "STANDARD_CORPORATE",
+    "NORMAL_TRAFFIC",
+    "BENIGN_ENTITY",
+    "ISOLATED_ENTITY",
+})
+
 class SyntheticNetworkModelStub(NetworkAnalyzer):
     """
     A placeholder AI model implementation for network forensics that returns deterministic,
@@ -109,7 +117,7 @@ def ailee_policy_gate(result: AnalysisResult, min_confidence: float = 0.85, min_
     Returns True if the analysis result can be trusted and acted upon
     (e.g., generating a rule or an alert), and False if it requires human review or rejection.
     """
-    if result.classification_label in ("BENIGN_TRAFFIC", "STANDARD_CORPORATE"):
+    if result.classification_label in _BENIGN_LABELS:
         return False # No action needed for benign traffic
 
     return result.confidence_score >= min_confidence and result.risk_score >= min_risk

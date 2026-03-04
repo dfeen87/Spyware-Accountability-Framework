@@ -17,10 +17,11 @@ import hmac
 import json
 import logging
 import os
+import secrets
 import time
 import urllib.request
 import urllib.error
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
@@ -47,7 +48,7 @@ class ReputationPeer(BaseModel):
 class ReputationEntry(BaseModel):
     """A single reputation record returned by a peer or found locally."""
     entity: str = Field(..., description="The queried entity (domain, IP, vendor name, ASN, etc.)")
-    entity_type: str = Field(..., description="Type of entity: 'domain', 'ip', 'vendor', 'asn'")
+    entity_type: Literal["domain", "ip", "vendor", "asn"] = Field(..., description="Type of entity: 'domain', 'ip', 'vendor', 'asn'")
     risk_score: float = Field(
         ..., ge=0.0, le=10.0, description="Peer-assessed risk score (0=benign, 10=highly malicious)"
     )
@@ -104,7 +105,7 @@ def _query_single_peer(
     Sends a signed reputation query to a single peer and returns its response.
 
     The request format is a JSON POST with:
-      { "entity": <str>, "entity_type": <str>, "timestamp": <float>, "sig": <hex> }
+      { "entity": <str>, "entity_type": <str>, "timestamp": <float>, "nonce": <hex>, "sig": <hex> }
 
     The peer is expected to return a JSON body matching the ReputationEntry schema.
 
@@ -112,11 +113,16 @@ def _query_single_peer(
         A ReputationEntry on success, or None if the peer is unreachable or
         returns an invalid/unsigned response.
     """
+    if not peer.url.startswith("https://"):
+        logger.error("Peer %s has non-HTTPS URL; refusing to connect.", peer.name)
+        return None
+
     payload = {
         "entity": entity,
         "entity_type": entity_type,
         "timestamp": time.time(),
     }
+    payload["nonce"] = secrets.token_hex(16)
     payload["sig"] = _sign_query(payload, peer.shared_secret)
 
     body = json.dumps(payload).encode("utf-8")
@@ -177,7 +183,7 @@ def load_peers_from_env() -> List[ReputationPeer]:
 
 def query_reputation(
     entity: str,
-    entity_type: str = "domain",
+    entity_type: Literal["domain", "ip", "vendor", "asn"] = "domain",
     peers: Optional[List[ReputationPeer]] = None,
 ) -> ReputationQueryResult:
     """

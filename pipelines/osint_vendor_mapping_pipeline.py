@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import argparse
 from typing import Optional
 import requests
@@ -12,6 +13,32 @@ from ailee_core.privacy import redact_pii
 
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+_SSRF_BLOCKED_HOSTS = {"localhost", "127.0.0.1", "169.254.169.254", "[::1]"}
+_SSRF_PRIVATE_PATTERN = re.compile(
+    r"^(10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+)$"
+)
+
+
+def _validate_webhook_url(url: str) -> bool:
+    """
+    Validates a webhook URL against SSRF risks.
+    Returns True if the URL is safe to POST to, False otherwise.
+    """
+    if not url.startswith("https://"):
+        logging.error("Webhook URL must use HTTPS scheme; refusing to connect.")
+        return False
+    try:
+        from urllib.parse import urlparse
+        parsed = urlparse(url)
+        hostname = parsed.hostname or ""
+        if hostname in _SSRF_BLOCKED_HOSTS or _SSRF_PRIVATE_PATTERN.match(hostname):
+            logging.error("Webhook URL hostname '%s' is in a blocked/private range; refusing to connect.", hostname)
+            return False
+    except Exception:
+        logging.error("Failed to parse webhook URL; refusing to connect.")
+        return False
+    return True
 
 def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] = None) -> None:
     """
@@ -130,15 +157,18 @@ def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] =
 
     # 6. Optional Webhook Forwarding (Active Prevention Handoff)
     if webhook_url and report.get("status") == "ACTIONABLE":
-        logging.info(f"Forwarding actionable report to webhook: {webhook_url}")
-        try:
-            # Strictly outward posting of intelligence. No returning actions applied locally.
-            response = requests.post(webhook_url, json=report, timeout=10.0)
-            response.raise_for_status()
-            logging.info("Webhook forwarding successful.")
-        except RequestException as e:
-            # Log without failing the pipeline; core SAF responsibility is fulfilled
-            logging.error(f"Failed to forward report to webhook: {e}")
+        if not _validate_webhook_url(webhook_url):
+            logging.error("Webhook URL failed validation; skipping webhook forwarding.")
+        else:
+            logging.info(f"Forwarding actionable report to webhook: {webhook_url}")
+            try:
+                # Strictly outward posting of intelligence. No returning actions applied locally.
+                response = requests.post(webhook_url, json=report, timeout=10.0)
+                response.raise_for_status()
+                logging.info("Webhook forwarding successful.")
+            except RequestException as e:
+                # Log without failing the pipeline; core SAF responsibility is fulfilled
+                logging.error(f"Failed to forward report to webhook: {e}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the OSINT Vendor Mapping Pipeline.")

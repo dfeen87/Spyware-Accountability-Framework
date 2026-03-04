@@ -25,6 +25,10 @@ _SYSTEM_PROMPT = (
 )
 
 
+_MAX_LLM_INPUT_SIZE_BYTES = 102400  # 100KB
+_VALID_LLM_LABELS = {"HIGH_RISK_VENDOR", "MODERATE_RISK_VENDOR", "BENIGN_ENTITY"}
+
+
 def _call_live_llm(input_data: Dict[str, Any]) -> Optional[AnalysisResult]:
     """
     Sends a prompt to the configured OpenAI-compatible LLM endpoint and
@@ -38,9 +42,14 @@ def _call_live_llm(input_data: Dict[str, Any]) -> Optional[AnalysisResult]:
     if not llm_api_url or not llm_api_key:
         return None
 
+    serialized = json.dumps(input_data)
+    if len(serialized) > _MAX_LLM_INPUT_SIZE_BYTES:
+        logger.warning("Input data exceeds 100KB limit for LLM backend; falling back to stub.")
+        return None
+
     user_content = (
         "Analyze the following OSINT data and respond with the JSON schema described:\n"
-        + json.dumps(input_data, indent=2)
+        + serialized
     )
     request_body = json.dumps(
         {
@@ -68,6 +77,12 @@ def _call_live_llm(input_data: Dict[str, Any]) -> Optional[AnalysisResult]:
             raw = json.loads(response.read().decode("utf-8"))
             content = raw["choices"][0]["message"]["content"]
             parsed = json.loads(content)
+            if parsed.get("classification_label") not in _VALID_LLM_LABELS:
+                logger.warning(
+                    "LLM returned unexpected label '%s'; falling back to stub.",
+                    parsed.get("classification_label"),
+                )
+                return None
             return AnalysisResult(
                 classification_label=parsed["classification_label"],
                 confidence_score=float(parsed["confidence_score"]),

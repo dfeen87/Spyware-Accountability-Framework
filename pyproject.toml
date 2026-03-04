@@ -4,9 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "spyware-accountability-framework"
-version = "3.0.0"
+version = "3.3.0"
 description = "A defensive, human-rights-aligned framework for detecting and mapping mercenary spyware infrastructure."
 readme = "README.md"
+requires-python = ">=3.9"
 authors = [
     { name = "Don Michael Feeney Jr.", email = "dfeen87@gmail.com" }
 ]
@@ -20,12 +21,14 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 keywords = ["defensive", "accountability", "spyware", "osint", "forensics"]
 dependencies = [
     "pydantic>=2.0",
     "networkx>=3.0",
     "requests>=2.0",
+    "PyYAML>=6.0",
 ]
 
 [project.optional-dependencies]
