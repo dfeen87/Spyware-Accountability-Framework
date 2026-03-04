@@ -6,8 +6,12 @@ def lint_network_rule(file_path: Path) -> bool:
     """
     Validates generic network rules (like Suricata/Snort) for synthetic policy adherence.
     """
-    with open(file_path, 'r', encoding='utf-8') as f:
-        content = f.read()
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+    except (FileNotFoundError, PermissionError, OSError) as e:
+        print(f"❌ {file_path} failed validation: {e}")
+        return False
 
     errors = []
 

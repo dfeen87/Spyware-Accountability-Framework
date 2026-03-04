@@ -16,6 +16,9 @@ import hmac
 import logging
 from typing import Any, Dict, List
 
+_secure_random = random.SystemRandom()
+_MAX_REDACT_PII_RECURSION_DEPTH = 50
+
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -52,21 +55,24 @@ _PII_PATTERNS: List[tuple] = [
 ]
 
 
-def redact_pii(value: Any) -> Any:
+def redact_pii(value: Any, _depth: int = 0) -> Any:
     """
     Recursively traverses a data structure (dict, list, or scalar) and
     replaces any detected PII with placeholder tokens.
 
     Args:
         value: The input data to scan. Can be a dict, list, str, or any scalar.
+        _depth: Internal recursion depth counter. Raises ValueError if exceeded.
 
     Returns:
         A new data structure with PII replaced by placeholder strings.
     """
+    if _depth > _MAX_REDACT_PII_RECURSION_DEPTH:
+        raise ValueError("redact_pii: maximum recursion depth exceeded (possible malicious input)")
     if isinstance(value, dict):
-        return {k: redact_pii(v) for k, v in value.items()}
+        return {k: redact_pii(v, _depth + 1) for k, v in value.items()}
     if isinstance(value, list):
-        return [redact_pii(item) for item in value]
+        return [redact_pii(item, _depth + 1) for item in value]
     if isinstance(value, str):
         redacted = value
         for pattern, replacement in _PII_PATTERNS:
@@ -96,9 +102,11 @@ def _laplace_noise(sensitivity: float, epsilon: float) -> float:
     """
     if epsilon <= 0:
         raise ValueError("epsilon must be positive")
+    if sensitivity <= 0:
+        raise ValueError("sensitivity must be positive")
     scale = sensitivity / epsilon
     # Use inverse CDF method: Lap(b) = -b * sign(U) * ln(1 - 2|U|) where U ~ Uniform(-0.5, 0.5)
-    u = random.uniform(-0.5 + 1e-10, 0.5 - 1e-10)
+    u = _secure_random.uniform(-0.5 + 1e-10, 0.5 - 1e-10)
     return -scale * math.copysign(1.0, u) * math.log(1.0 - 2.0 * abs(u))
 
 
@@ -122,6 +130,8 @@ def apply_differential_privacy(
         clamped to their valid ranges.
     """
     noised = dict(result_dict)
+    if epsilon <= 0:
+        raise ValueError("epsilon must be positive")
     # confidence_score: [0.0, 1.0], sensitivity = 1.0
     # risk_score: [0.0, 10.0], sensitivity = 10.0
     sensitivities = {"confidence_score": 1.0, "risk_score": 10.0}
@@ -155,4 +165,4 @@ def pseudonymize(value: str, secret: bytes) -> str:
         A hex string pseudonym (first 16 hex chars of HMAC-SHA256).
     """
     mac = hmac.new(secret, value.encode("utf-8"), hashlib.sha256)
-    return "PSEUDO_" + mac.hexdigest()[:16]
+    return "PSEUDO_" + mac.hexdigest()[:32]

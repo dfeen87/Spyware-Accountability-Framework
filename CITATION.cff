@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "Spyware Accountability Framework"
-version: 3.0.0
+version: 3.3.0
 date-released: 2025-01-01
 authors:
   - family-names: Feeney Jr.

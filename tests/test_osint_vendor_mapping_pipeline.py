@@ -122,7 +122,7 @@ def test_osint_vendor_mapping_pipeline_webhook_success(mock_post, tmp_path):
     with open(input_file, 'w') as f:
         json.dump(mock_data, f)
 
-    webhook_url = "http://example.com/webhook"
+    webhook_url = "https://example.com/webhook"
     run_pipeline(str(input_file), str(output_file), webhook_url=webhook_url)
 
     mock_post.assert_called_once()
@@ -162,7 +162,7 @@ def test_osint_vendor_mapping_pipeline_webhook_failure_no_crash(mock_post, tmp_p
         json.dump(mock_data, f)
 
     mock_post.side_effect = RequestException("Mocked connection error")
-    webhook_url = "http://example.com/webhook"
+    webhook_url = "https://example.com/webhook"
 
     # Should not raise an exception
     run_pipeline(str(input_file), str(output_file), webhook_url=webhook_url)
@@ -194,7 +194,7 @@ def test_osint_vendor_mapping_pipeline_webhook_not_actionable(mock_post, tmp_pat
     with open(input_file, 'w') as f:
         json.dump(mock_data, f)
 
-    webhook_url = "http://example.com/webhook"
+    webhook_url = "https://example.com/webhook"
     run_pipeline(str(input_file), str(output_file), webhook_url=webhook_url)
 
     mock_post.assert_not_called()
