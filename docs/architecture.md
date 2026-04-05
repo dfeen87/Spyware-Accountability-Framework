@@ -5,7 +5,7 @@ The Spyware Accountability Framework is designed with a **layered, modular archi
 ## High-Level Data Flow
 
 1. **Ingest & Normalize**: Raw data (network flows, OSINT datasets, forensic artifacts) is ingested and mapped into strict schemas (e.g., via Pydantic models).
-2. **Analysis (AILEE Layer)**: Normalized artifacts are passed to the `ailee_core` interfaces. Here, backend models (stubs for now, later LLMs or specialized classifiers) generate probabilistic scores (e.g., risk score, classification label). Crucially, the AILEE layer applies a *governance policy* to determine if the AI's output reaches the required trust threshold.
+2. **Analysis (AILEE Layer)**: Normalized artifacts are passed to the `ailee_core` interfaces. Backend models (live API backends when configured, or deterministic stubs otherwise) generate probabilistic scores (e.g., risk score, classification label). The AILEE layer applies a *governance policy* to determine if the AI's output reaches the required trust threshold.
 3. **Correlate**: The verified insights are mapped into broader ecosystem graphs (e.g., linking a malicious domain to a vendor to a jurisdiction).
 4. **Output**: The system produces actionable, defensive intelligence—machine-readable IOCs and rules, and human-readable briefing documents.
 
@@ -23,13 +23,13 @@ This is the heart of our integration with the AILEE philosophy. We do not trust 
 
 - **Interfaces**: We define clear `Analyzer` protocols (Network, OSINT, Forensics).
 - **AnalysisResult**: Every result returned by the core must include not just a label, but a `confidence_score`, an overall `risk_score`, and an `explanation`.
-- **Policy Enforcement**: (Future) Models are gated by strict policies. If a model detects a malicious artifact but its confidence is below 0.85, the AILEE layer flags it for human review rather than blindly generating an alert.
+- **Policy Enforcement**: Models are gated by strict policies. If a model detects a malicious artifact but its confidence is below 0.85, the AILEE layer flags it for human review rather than blindly generating an alert.
 
 #### Pluggable AILEE Backends
 
 The `ailee_core/backends/` directory contains modular implementations of the `Analyzer` interfaces. This pluggable architecture allows researchers and defenders to swap out underlying analytical models via configuration (e.g., `config["backend"] = "llm"`), depending on their operational needs and available infrastructure.
 
-Current backend stubs (which use deterministic, defensive placeholder logic) include:
+Current backend implementations (which fall back to deterministic, defensive placeholder logic when live API credentials are not configured) include:
 - **`llm_backend.py`**: Simulates querying a Large Language Model to perform complex semantic analysis and context extraction from unstructured OSINT.
 - **`classifier_backend.py`**: Simulates a dedicated Machine Learning model trained to detect C2 beaconing and spyware-like network patterns in structured telemetry.
 - **`osint_semantic_backend.py`**: Simulates a graph database or reasoning engine to evaluate risk based on complex relationship networks (e.g., entity proximity to known malicious actors).

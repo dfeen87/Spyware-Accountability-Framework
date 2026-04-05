@@ -29,16 +29,16 @@ This document summarizes the implementation of the Spyware Accountability Framew
    - Created policy documents: `governance_board_structure.md`, `major_change_review_process.md`, and `sensitive_data_request_policy.md`.
    - Updated `docs/ethics-and-governance.md` to include the Board and its processes.
 
-## What Remains for v3
+## What Was Added in v3
 
-The v2 implementation maintains the framework's strictly defensive, human-rights-aligned scope, using synthetic data and stubbed backends. For v3, the major focus areas should include:
+All four v3 milestones have been completed. See [`governance/v3/v3_change_review.md`](governance/v3/v3_change_review.md) for the full Governance Board change review.
 
-- **Live AI Model Integration:** Replacing the v2 stubbed backends with functional API connections to live LLMs and ML classifiers for real-world analysis (while adhering to the Major Change Review Process).
-- **Advanced Graph Analytics:** Implementing robust semantic graph databases (e.g., Neo4j, NetworkX) within the OSINT pipeline to evaluate complex entity relationships at scale.
-- **Enhanced Data Privacy Overlays:** Building stronger, cryptographically assured PII redaction and differential privacy mechanics into the ingest pipelines to handle non-synthetic sensitive data more safely.
-- **Decentralized Reputation Networks:** Exploring federated models where trusted NGOs can securely query shared datasets of known mercenary infrastructure without centralizing the intelligence.
+- **Live AI Model Integration:** Pluggable live API backends for `LLMBackend` and `ClassifierBackend`, configurable via environment variables, with deterministic fallback.
+- **Advanced Graph Analytics:** `OSINTSemanticBackend` and the OSINT pipeline build real `networkx.DiGraph` objects and compute degree-centrality metrics.
+- **Enhanced Data Privacy Overlays:** `ailee_core/privacy` provides PII redaction, Laplace differential privacy, and HMAC-based pseudonymization; both ingestion pipelines call `redact_pii` at ingest.
+- **Decentralized Reputation Networks:** `ailee_core/reputation` implements HMAC-SHA256-signed federated queries with graceful degradation when no peers are configured.
 
-## Integration Notes for Future AILEE Model Upgrades
+## Integration Notes for AILEE Model Upgrades
 
 When replacing the current stubbed backends (`ailee_core/backends/*.py`) with functional models, ensure the following:
 
