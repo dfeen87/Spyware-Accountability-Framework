@@ -1,7 +1,7 @@
 # Spyware Accountability Framework
 
 [![CI](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-3.3.0-informational.svg)](CITATION.cff)
+[![Version](https://img.shields.io/badge/version-3.3.1-informational.svg)](CITATION.cff)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 
 A **defensive, human-rights-aligned framework** that uses AILEE (Adaptive Integrity Layer for AI Decision Systems) as an analysis engine to:
@@ -171,7 +171,7 @@ The `ailee_core` module implements the AILEE architecture (Layering, Policy, and
 
 ---
 
-### Live Backend Configuration
+## Live Backend Configuration
 
 | Environment Variable    | Purpose                                     |
 |-------------------------|---------------------------------------------|
@@ -228,7 +228,7 @@ If you use this framework in research or reports, please cite it using the metad
 @software{Feeney_Spyware_Accountability_Framework,
   author  = {Feeney Jr., Don Michael},
   title   = {Spyware Accountability Framework},
-  version = {3.3.0},
+  version = {3.3.1},
   URL     = {https://github.com/dfeen87/Spyware-Accountability-Framework}
 }
 ```

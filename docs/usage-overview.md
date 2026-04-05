@@ -95,8 +95,8 @@ The following entities and relationships form the observed spyware ecosystem map
 
 ## Exploring with Notebooks
 
-For interactive analysis and visualization, we provide Jupyter notebooks in the `examples/notebooks/` directory. These demonstrate how to load the synthetic data, run the pipelines programmatically, and inspect the resulting AILEE AnalysisResult objects and graphs.
+For interactive analysis and visualization, we provide a programmatic walkthrough script in the `examples/notebooks/` directory. This demonstrates how to load the synthetic data, run the pipelines programmatically, and inspect the resulting AILEE AnalysisResult objects and graphs.
 
 ```bash
-jupyter notebook examples/notebooks/exploratory_analysis.ipynb
+python examples/notebooks/exploratory_analysis.py
 ```
