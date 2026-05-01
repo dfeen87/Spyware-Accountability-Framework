@@ -14,7 +14,7 @@ abstract: >
   mercenary spyware infrastructure. Provides OSINT graph analytics,
   network forensics pipelines, privacy-preserving data processing, and
   a decentralized reputation network for collaborative threat intelligence.
-license: non-commercial
+license: MIT
 repository-code: "https://github.com/dfeen87/Spyware-Accountability-Framework"
 keywords:
   - defensive
