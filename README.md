@@ -241,8 +241,12 @@ All contributors and users are expected to follow our [Code of Conduct](CODE_OF_
 
 ---
 
+## Enterprise Consulting & Integration
+This architecture is fully open-source under the MIT License. If your organization requires custom scaling, proprietary integration, or dedicated technical consulting to deploy these models at an enterprise level, please reach out at: dfeen87@gmail.com
+
+---
+
 ## License
 
-This project is available for **non‑commercial use only** under the terms of the included LICENSE file.  
-Commercial use requires a separate paid license.
+This project is 100% open-source and released under the MIT License. See the [LICENSE](LICENSE) file for full terms.
 
