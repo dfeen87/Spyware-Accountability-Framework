@@ -108,25 +108,6 @@ When these variables are unset, the framework falls back to deterministic stub l
 
 ---
 
-## Roadmap
-
-### v3 (Current)
-
-1. **Live AI Model Integration:** Pluggable live API backends for `LLMBackend` and `ClassifierBackend`, configurable via environment variables. Falls back gracefully to deterministic stub logic when env vars are unset.
-2. **Advanced Graph Analytics:** `OSINTSemanticBackend` and the OSINT pipeline now build real `networkx.DiGraph` objects and compute degree-centrality metrics to identify highly connected nodes in mercenary ecosystems.
-3. **Enhanced Data Privacy Overlays:** `ailee_core/privacy` provides PII redaction (`redact_pii`), Laplace differential privacy (`apply_differential_privacy`), and HMAC-based pseudonymization. Both ingestion pipelines call `redact_pii` before any analysis.
-4. **Decentralized Reputation Networks:** `ailee_core/reputation` implements HMAC-SHA256-signed federated queries to trusted NGO peers, with graceful degradation when no peers are configured.
-
-### v2 (Completed)
-
-1. **Pluggable AILEE Backends:** Implemented three stubbed backends (`llm_backend.py`, `classifier_backend.py`, `osint_semantic_backend.py`).
-2. **Expanded Synthetic Datasets:** Created richer v2 datasets in `synthetic_data/`.
-3. **Automated Threat Briefings:** Enhanced the reporting pipeline to generate Markdown briefs with graph visualization.
-4. **CI/CD for Rulesets:** Automated YARA/Sigma/Suricata validation in CI.
-5. **Community Governance Board:** Formalized review processes in `governance/v2/`.
-
----
-
 ## Acknowledgements
 
 This project was developed with a combination of original ideas, hands‑on coding, and support from advanced AI systems. I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **Google Jules** for their meaningful assistance in refining concepts, improving clarity, and strengthening the overall quality of this work.
