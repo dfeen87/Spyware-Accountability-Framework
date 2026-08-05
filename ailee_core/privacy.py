@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 """
 ailee_core/privacy.py - Enhanced Data Privacy Overlays (v3)
 
@@ -8,12 +11,12 @@ sensitive data is accidentally passed to the framework, PII cannot propagate
 further into the analysis pipeline or appear in reports.
 """
 
-import re
-import math
-import random
 import hashlib
 import hmac
 import logging
+import math
+import random
+import re
 from typing import Any, Dict, List
 
 _secure_random = random.SystemRandom()

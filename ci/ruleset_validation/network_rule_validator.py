@@ -1,6 +1,10 @@
-import sys
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 import argparse
+import sys
 from pathlib import Path
+
 
 def lint_network_rule(file_path: Path) -> bool:
     """

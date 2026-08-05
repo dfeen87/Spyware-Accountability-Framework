@@ -1,12 +1,15 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 """
 Tests for the Cloudflare AI Gateway and standards integrations.
 """
 
 import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
-from ailee_core.backends.llm_backend import LLMBackend
 from ailee_core.backends.classifier_backend import ClassifierBackend
+from ailee_core.backends.llm_backend import LLMBackend
 
 
 class TestCloudflareLLMIntegration:

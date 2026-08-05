@@ -1,19 +1,22 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 """
 Tests for the v3 Decentralized Reputation Network module (ailee_core/reputation.py).
 """
 
 import json
 import time
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 from ailee_core.reputation import (
-    ReputationPeer,
     ReputationEntry,
+    ReputationPeer,
     ReputationQueryResult,
-    query_reputation,
-    load_peers_from_env,
     _sign_query,
     _verify_signature,
+    load_peers_from_env,
+    query_reputation,
 )
 
 

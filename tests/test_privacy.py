@@ -1,9 +1,13 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 """
 Tests for the v3 Privacy Overlay module (ailee_core/privacy.py).
 """
 
 import pytest
-from ailee_core.privacy import redact_pii, apply_differential_privacy, pseudonymize
+
+from ailee_core.privacy import apply_differential_privacy, pseudonymize, redact_pii
 
 
 class TestRedactPii:

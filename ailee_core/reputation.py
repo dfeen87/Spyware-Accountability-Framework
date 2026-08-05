@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 """
 ailee_core/reputation.py - Decentralized Reputation Networks (v3)
 
@@ -19,9 +22,10 @@ import logging
 import os
 import secrets
 import time
-import urllib.request
 import urllib.error
+import urllib.request
 from typing import Any, Dict, List, Literal, Optional
+
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)

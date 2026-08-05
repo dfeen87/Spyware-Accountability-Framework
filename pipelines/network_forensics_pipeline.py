@@ -1,8 +1,12 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
+import argparse
 import json
 import logging
 import re
 from typing import Dict, List, Optional
-import argparse
+
 import requests
 from requests.exceptions import RequestException
 
@@ -109,7 +113,7 @@ def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] =
         with open(output_path, 'w') as f:
             json.dump(report, f, indent=4)
         logging.info(f"Pipeline complete. Report written to {output_path}")
-    except IOError as e:
+    except OSError as e:
         logging.error(f"Failed to write output report: {e}")
 
     # 6. Optional Webhook Forwarding (Active Prevention Handoff)

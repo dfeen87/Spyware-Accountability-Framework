@@ -1,11 +1,14 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 import json
 import logging
 import os
-import urllib.request
 import urllib.error
-from typing import Dict, Any, Optional
+import urllib.request
+from typing import Any, Dict, Optional
 
-from ailee_core.interfaces import NetworkAnalyzer, AnalysisResult
+from ailee_core.interfaces import AnalysisResult, NetworkAnalyzer
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,8 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 from typing import Any, Dict
+
 from ailee_core.interfaces import AnalysisResult, NetworkAnalyzer, OSINTAnalyzer
 
 _BENIGN_LABELS = frozenset({

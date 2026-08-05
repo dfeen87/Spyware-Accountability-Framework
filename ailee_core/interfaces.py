@@ -1,5 +1,10 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 from typing import Any, Dict, Protocol
+
 from pydantic import BaseModel, Field
+
 
 class AnalysisResult(BaseModel):
     """

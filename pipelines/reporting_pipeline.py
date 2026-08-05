@@ -1,8 +1,11 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
+import argparse
 import json
 import logging
-from typing import Dict, Any
-import argparse
 from pathlib import Path
+from typing import Any, Dict
 
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -73,7 +76,7 @@ def generate_brief(network_data: Dict[str, Any], osint_data: Dict[str, Any], out
         with open(f"{output_path}/defensive_brief.md", 'w') as f:
             f.write(brief_content)
         logging.info(f"Brief successfully written to {output_path}/defensive_brief.md")
-    except IOError as e:
+    except OSError as e:
         logging.error(f"Failed to write defensive brief: {e}")
 
 
@@ -116,7 +119,7 @@ def run_pipeline(network_report_path: str, osint_graph_path: str, output_dir: st
         with open(ioc_output, 'w') as f:
             json.dump({"verified_iocs": iocs}, f, indent=4)
         logging.info(f"Machine-readable IOCs written to {ioc_output}")
-    except IOError as e:
+    except OSError as e:
         logging.error(f"Failed to write IOC report: {e}")
 
 

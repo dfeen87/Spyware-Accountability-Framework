@@ -1,6 +1,11 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 import json
 import os
+
 from pipelines.reporting_pipeline import run_pipeline
+
 
 def test_reporting_pipeline_success(tmp_path):
     """

@@ -1,9 +1,12 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 import logging
-from typing import Dict, Any
+from typing import Any, Dict
 
 import networkx as nx
 
-from ailee_core.interfaces import OSINTAnalyzer, AnalysisResult
+from ailee_core.interfaces import AnalysisResult, OSINTAnalyzer
 
 logger = logging.getLogger(__name__)
 
