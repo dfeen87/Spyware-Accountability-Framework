@@ -14,6 +14,7 @@ Design principles:
 - Query responses are aggregated locally; raw data never leaves the peer.
 - Graceful degradation: if no peers are reachable, local-only results are used.
 """
+from __future__ import annotations
 
 import hashlib
 import hmac
@@ -24,7 +25,7 @@ import secrets
 import time
 import urllib.error
 import urllib.request
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -56,7 +57,7 @@ class ReputationEntry(BaseModel):
     risk_score: float = Field(
         ..., ge=0.0, le=10.0, description="Peer-assessed risk score (0=benign, 10=highly malicious)"
     )
-    tags: List[str] = Field(default_factory=list, description="Associated tags (e.g., 'c2', 'exfil')")
+    tags: list[str] = Field(default_factory=list, description="Associated tags (e.g., 'c2', 'exfil')")
     source_peer: str = Field(default="local", description="Peer that contributed this entry")
     timestamp: float = Field(default_factory=time.time, description="Unix timestamp of the assessment")
 
@@ -64,7 +65,7 @@ class ReputationEntry(BaseModel):
 class ReputationQueryResult(BaseModel):
     """Aggregated result of a federated reputation query."""
     entity: str
-    entries: List[ReputationEntry] = Field(default_factory=list)
+    entries: list[ReputationEntry] = Field(default_factory=list)
     aggregate_risk_score: float = Field(
         default=0.0, ge=0.0, le=10.0,
         description="Mean risk score across all peer responses"
@@ -77,7 +78,7 @@ class ReputationQueryResult(BaseModel):
 # HMAC Request Signing
 # ---------------------------------------------------------------------------
 
-def _sign_query(payload: Dict[str, Any], secret: str) -> str:
+def _sign_query(payload: dict[str, Any], secret: str) -> str:
     """
     Produces an HMAC-SHA256 signature for a query payload.
 
@@ -92,7 +93,7 @@ def _sign_query(payload: Dict[str, Any], secret: str) -> str:
     return hmac.new(secret.encode("utf-8"), canonical.encode("utf-8"), hashlib.sha256).hexdigest()
 
 
-def _verify_signature(payload: Dict[str, Any], secret: str, provided_sig: str) -> bool:
+def _verify_signature(payload: dict[str, Any], secret: str, provided_sig: str) -> bool:
     """Verifies a query signature using constant-time comparison."""
     expected = _sign_query(payload, secret)
     return hmac.compare_digest(expected, provided_sig)
@@ -104,7 +105,7 @@ def _verify_signature(payload: Dict[str, Any], secret: str, provided_sig: str) -
 
 def _query_single_peer(
     peer: ReputationPeer, entity: str, entity_type: str
-) -> Optional[ReputationEntry]:
+) -> ReputationEntry | None:
     """
     Sends a signed reputation query to a single peer and returns its response.
 
@@ -151,7 +152,7 @@ def _query_single_peer(
     except urllib.error.URLError as exc:
         logger.info("Peer %s unreachable: %s", peer.name, exc)
         return None
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.warning("Unexpected error querying peer %s: %s", peer.name, exc)
         return None
 
@@ -160,7 +161,7 @@ def _query_single_peer(
 # Federated Query Orchestrator
 # ---------------------------------------------------------------------------
 
-def load_peers_from_env() -> List[ReputationPeer]:
+def load_peers_from_env() -> list[ReputationPeer]:
     """
     Loads peer configuration from the ``SAF_REPUTATION_PEERS`` environment
     variable. The variable should be a JSON array of peer objects conforming
@@ -180,7 +181,7 @@ def load_peers_from_env() -> List[ReputationPeer]:
     try:
         peer_dicts = json.loads(raw)
         return [ReputationPeer(**p) for p in peer_dicts]
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.warning("Failed to parse SAF_REPUTATION_PEERS: %s", exc)
         return []
 
@@ -188,7 +189,7 @@ def load_peers_from_env() -> List[ReputationPeer]:
 def query_reputation(
     entity: str,
     entity_type: Literal["domain", "ip", "vendor", "asn"] = "domain",
-    peers: Optional[List[ReputationPeer]] = None,
+    peers: list[ReputationPeer] | None = None,
 ) -> ReputationQueryResult:
     """
     Queries the federated reputation network for intelligence about an entity.

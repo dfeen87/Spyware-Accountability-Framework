@@ -1,7 +1,7 @@
 # Copyright (c) 2026 Don Michael Feeney Jr.
 # Licensed under the PolyForm Noncommercial License 1.0.0
 
-from typing import Any, Dict, Protocol
+from typing import Any, Protocol
 
 from pydantic import BaseModel, Field
 
@@ -34,7 +34,7 @@ class AnalysisResult(BaseModel):
         ...,
         description="A human-readable explanation of why this classification was made."
     )
-    metadata: Dict[str, Any] = Field(
+    metadata: dict[str, Any] = Field(
         default_factory=dict,
         description="Any additional structured context (e.g., matched IOCs, relevant jurisdictions)."
     )
@@ -45,7 +45,7 @@ class NetworkAnalyzer(Protocol):
     Interface for analyzing network telemetry, packet captures, or flow data.
     Implementations should detect patterns indicative of spyware C2 or exfiltration.
     """
-    def analyze(self, input_data: Dict[str, Any]) -> AnalysisResult:
+    def analyze(self, input_data: dict[str, Any]) -> AnalysisResult:
         ...
 
 
@@ -54,7 +54,7 @@ class ForensicAnalyzer(Protocol):
     Interface for analyzing forensic artifacts (e.g., files, process lists, memory dumps)
     recovered from potentially compromised devices.
     """
-    def analyze(self, input_data: Dict[str, Any]) -> AnalysisResult:
+    def analyze(self, input_data: dict[str, Any]) -> AnalysisResult:
         ...
 
 
@@ -63,5 +63,5 @@ class OSINTAnalyzer(Protocol):
     Interface for analyzing Open Source Intelligence (e.g., corporate registries,
     WHOIS data, passive DNS) to map and score vendor infrastructure.
     """
-    def analyze(self, input_data: Dict[str, Any]) -> AnalysisResult:
+    def analyze(self, input_data: dict[str, Any]) -> AnalysisResult:
         ...

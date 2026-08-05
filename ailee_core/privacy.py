@@ -17,7 +17,7 @@ import logging
 import math
 import random
 import re
-from typing import Any, Dict, List
+from typing import Any
 
 _secure_random = random.SystemRandom()
 _MAX_REDACT_PII_RECURSION_DEPTH = 50
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 # PII Detection Patterns
 # ---------------------------------------------------------------------------
 
-_PII_PATTERNS: List[tuple] = [
+_PII_PATTERNS: list[tuple] = [
     # Email addresses
     (re.compile(r"\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b"), "[REDACTED_EMAIL]"),
     # Phone numbers (E.164, common US/EU formats)
@@ -114,10 +114,10 @@ def _laplace_noise(sensitivity: float, epsilon: float) -> float:
 
 
 def apply_differential_privacy(
-    result_dict: Dict[str, Any],
+    result_dict: dict[str, Any],
     epsilon: float = 1.0,
     fields: tuple = ("confidence_score", "risk_score"),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Applies the Laplace differential privacy mechanism to selected numeric
     fields in an AnalysisResult dict. This masks the precise model scores

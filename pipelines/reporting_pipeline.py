@@ -5,12 +5,12 @@ import argparse
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-def generate_brief(network_data: Dict[str, Any], osint_data: Dict[str, Any], output_path: str) -> None:
+def generate_brief(network_data: dict[str, Any], osint_data: dict[str, Any], output_path: str) -> None:
     """
     Generates a human-readable Markdown brief summarizing the AILEE-vetted findings
     using the v2 automated threat briefing template.

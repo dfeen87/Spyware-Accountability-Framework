@@ -1,11 +1,12 @@
 # Copyright (c) 2026 Don Michael Feeney Jr.
 # Licensed under the PolyForm Noncommercial License 1.0.0
 
+from __future__ import annotations
+
 import argparse
 import json
 import logging
 import re
-from typing import Optional
 
 import networkx as nx
 import requests
@@ -43,7 +44,7 @@ def _validate_webhook_url(url: str) -> bool:
         return False
     return True
 
-def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] = None) -> None:
+def run_pipeline(input_path: str, output_path: str, webhook_url: str | None = None) -> None:
     """
     Executes the OSINT Vendor Mapping Pipeline on structured OSINT data.
 
