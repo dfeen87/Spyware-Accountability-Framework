@@ -50,6 +50,9 @@ include = ["ailee_core*", "pipelines*"]
 line-length = 88
 target-version = "py39"
 
+[tool.ruff.lint]
+ignore = ["LOG", "BLE", "FA", "UP", "PIE", "PLR", "PLW", "SIM", "PTH"]
+
 [tool.pytest.ini_options]
 addopts = "-v --tb=short"
 testpaths = ["tests"]

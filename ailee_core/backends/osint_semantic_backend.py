@@ -1,14 +1,17 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 import logging
-from typing import Dict, Any
+from typing import Any
 
 import networkx as nx
 
-from ailee_core.interfaces import OSINTAnalyzer, AnalysisResult
+from ailee_core.interfaces import AnalysisResult, OSINTAnalyzer
 
 logger = logging.getLogger(__name__)
 
 
-def build_entity_graph(input_data: Dict[str, Any]) -> nx.DiGraph:
+def build_entity_graph(input_data: dict[str, Any]) -> nx.DiGraph:
     """
     Constructs a directed entity graph from OSINT input data using NetworkX.
 
@@ -57,7 +60,7 @@ def build_entity_graph(input_data: Dict[str, Any]) -> nx.DiGraph:
     return graph
 
 
-def compute_graph_risk_metrics(graph: nx.DiGraph) -> Dict[str, Any]:
+def compute_graph_risk_metrics(graph: nx.DiGraph) -> dict[str, Any]:
     """
     Computes graph-theoretic risk metrics for the entity ecosystem.
 
@@ -100,7 +103,7 @@ class OSINTSemanticBackend(OSINTAnalyzer):
     This replaces the simple heuristic stub from v2 with real graph analytics.
     """
 
-    def analyze(self, input_data: Dict[str, Any]) -> AnalysisResult:
+    def analyze(self, input_data: dict[str, Any]) -> AnalysisResult:
         graph = build_entity_graph(input_data)
         metrics = compute_graph_risk_metrics(graph)
 

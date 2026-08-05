@@ -1,11 +1,16 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
+from __future__ import annotations
+
 import json
 import logging
 import os
-import urllib.request
 import urllib.error
-from typing import Dict, Any, Optional
+import urllib.request
+from typing import Any
 
-from ailee_core.interfaces import NetworkAnalyzer, AnalysisResult
+from ailee_core.interfaces import AnalysisResult, NetworkAnalyzer
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +26,7 @@ logger = logging.getLogger(__name__)
 # changes and test monkeypatching take effect without reloading the module.
 
 
-def _call_live_classifier(input_data: Dict[str, Any]) -> Optional[AnalysisResult]:
+def _call_live_classifier(input_data: dict[str, Any]) -> AnalysisResult | None:
     """
     Sends network-flow features to the configured ML classifier endpoint.
 
@@ -102,7 +107,7 @@ class ClassifierBackend(NetworkAnalyzer):
     for the defensive-only, synthetic testing environment of this framework.
     """
 
-    def analyze(self, input_data: Dict[str, Any]) -> AnalysisResult:
+    def analyze(self, input_data: dict[str, Any]) -> AnalysisResult:
         # Attempt live classifier call first (v3 enhancement)
         live_result = _call_live_classifier(input_data)
         if live_result is not None:

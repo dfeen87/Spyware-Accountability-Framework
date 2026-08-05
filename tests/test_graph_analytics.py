@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 """
 Tests for the v3 Advanced Graph Analytics backend (ailee_core/backends/osint_semantic_backend.py).
 """
@@ -5,9 +8,9 @@ Tests for the v3 Advanced Graph Analytics backend (ailee_core/backends/osint_sem
 import networkx as nx
 
 from ailee_core.backends.osint_semantic_backend import (
+    OSINTSemanticBackend,
     build_entity_graph,
     compute_graph_risk_metrics,
-    OSINTSemanticBackend,
 )
 
 

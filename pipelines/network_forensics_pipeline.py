@@ -1,8 +1,13 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
+from __future__ import annotations
+
+import argparse
 import json
 import logging
 import re
-from typing import Dict, List, Optional
-import argparse
+
 import requests
 from requests.exceptions import RequestException
 
@@ -38,7 +43,7 @@ def _validate_webhook_url(url: str) -> bool:
         return False
     return True
 
-def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] = None) -> None:
+def run_pipeline(input_path: str, output_path: str, webhook_url: str | None = None) -> None:
     """
     Executes the Network Forensics Pipeline on synthetic or pre-processed network telemetry.
 
@@ -109,7 +114,7 @@ def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] =
         with open(output_path, 'w') as f:
             json.dump(report, f, indent=4)
         logging.info(f"Pipeline complete. Report written to {output_path}")
-    except IOError as e:
+    except OSError as e:
         logging.error(f"Failed to write output report: {e}")
 
     # 6. Optional Webhook Forwarding (Active Prevention Handoff)
@@ -129,7 +134,7 @@ def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] =
                 logging.error(f"Failed to forward report to webhook: {e}")
 
 
-def extract_features_from_markdown(content: str) -> Dict[str, List[str]]:
+def extract_features_from_markdown(content: str) -> dict[str, list[str]]:
     """
     Simulates parsing unstructured or semi-structured markdown notes from an analyst
     into structured indicators for the AI pipeline.
@@ -140,7 +145,7 @@ def extract_features_from_markdown(content: str) -> Dict[str, List[str]]:
     # Simple regex or string matching simulation
     for word in content.split():
         stripped = word.strip("`.,\"'()")
-        if stripped.endswith(".xyz") or stripped.endswith(".com"):
+        if stripped.endswith((".xyz", ".com")):
             domains.append(stripped)
         elif len(stripped) == 64 and all(c in "0123456789abcdef" for c in stripped.lower()):
             tls_fingerprints.append(stripped)

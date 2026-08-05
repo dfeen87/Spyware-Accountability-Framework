@@ -1,11 +1,16 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
+from __future__ import annotations
+
 import json
 import logging
 import os
-import urllib.request
 import urllib.error
-from typing import Dict, Any, Optional
+import urllib.request
+from typing import Any
 
-from ailee_core.interfaces import OSINTAnalyzer, AnalysisResult
+from ailee_core.interfaces import AnalysisResult, OSINTAnalyzer
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +41,7 @@ _MAX_LLM_INPUT_SIZE_BYTES = 102400  # 100KB
 _VALID_LLM_LABELS = {"HIGH_RISK_VENDOR", "MODERATE_RISK_VENDOR", "BENIGN_ENTITY"}
 
 
-def _call_live_llm(input_data: Dict[str, Any]) -> Optional[AnalysisResult]:
+def _call_live_llm(input_data: dict[str, Any]) -> AnalysisResult | None:
     """
     Sends a prompt to the configured OpenAI-compatible LLM endpoint and
     parses the JSON response into an AnalysisResult.
@@ -165,7 +170,7 @@ class LLMBackend(OSINTAnalyzer):
     for the defensive-only, synthetic testing environment of this framework.
     """
 
-    def analyze(self, input_data: Dict[str, Any]) -> AnalysisResult:
+    def analyze(self, input_data: dict[str, Any]) -> AnalysisResult:
         # Attempt live LLM call first (v3 enhancement)
         live_result = _call_live_llm(input_data)
         if live_result is not None:

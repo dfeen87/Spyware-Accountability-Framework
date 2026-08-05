@@ -1,12 +1,16 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
+from __future__ import annotations
+
+import argparse
 import json
 import logging
 import re
-import argparse
-from typing import Optional
-import requests
-from requests.exceptions import RequestException
 
 import networkx as nx
+import requests
+from requests.exceptions import RequestException
 
 from ailee_core.models_stub import SyntheticOSINTModelStub, ailee_policy_gate
 from ailee_core.privacy import redact_pii
@@ -40,7 +44,7 @@ def _validate_webhook_url(url: str) -> bool:
         return False
     return True
 
-def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] = None) -> None:
+def run_pipeline(input_path: str, output_path: str, webhook_url: str | None = None) -> None:
     """
     Executes the OSINT Vendor Mapping Pipeline on structured OSINT data.
 
@@ -152,7 +156,7 @@ def run_pipeline(input_path: str, output_path: str, webhook_url: Optional[str] =
         with open(output_path, 'w') as f:
             json.dump(report, f, indent=4)
         logging.info(f"Pipeline complete. Graph report written to {output_path}")
-    except IOError as e:
+    except OSError as e:
         logging.error(f"Failed to write output report: {e}")
 
     # 6. Optional Webhook Forwarding (Active Prevention Handoff)

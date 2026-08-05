@@ -1,4 +1,8 @@
-from typing import Any, Dict
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
+from typing import Any
+
 from ailee_core.interfaces import AnalysisResult, NetworkAnalyzer, OSINTAnalyzer
 
 _BENIGN_LABELS = frozenset({
@@ -17,7 +21,7 @@ class SyntheticNetworkModelStub(NetworkAnalyzer):
     This represents the "raw AI output" before AILEE policy is applied.
     """
 
-    def analyze(self, input_data: Dict[str, Any]) -> AnalysisResult:
+    def analyze(self, input_data: dict[str, Any]) -> AnalysisResult:
         """
         Takes raw or pre-processed network telemetry, inspects it for known
         spyware-like patterns (e.g., beacon intervals, TLS fingerprinting), and
@@ -62,7 +66,7 @@ class SyntheticOSINTModelStub(OSINTAnalyzer):
     representing a model that flags mercenary vendor infrastructure.
     """
 
-    def analyze(self, input_data: Dict[str, Any]) -> AnalysisResult:
+    def analyze(self, input_data: dict[str, Any]) -> AnalysisResult:
         """
         Takes a list of OSINT entities (vendors, hosting providers, domains) and
         returns an AnalysisResult scoring the likelihood of mercenary activity.

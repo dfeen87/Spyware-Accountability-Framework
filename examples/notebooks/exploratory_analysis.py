@@ -1,7 +1,13 @@
+# Required Notice: Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0 (https://polyformproject.org/licenses/noncommercial/1.0.0)
+
 import json
-from pipelines import network_forensics_pipeline
-from pipelines import osint_vendor_mapping_pipeline
-from pipelines import reporting_pipeline
+
+from pipelines import (
+    network_forensics_pipeline,
+    osint_vendor_mapping_pipeline,
+    reporting_pipeline,
+)
 
 # 1. Setup paths
 network_input = "../synthetic_network_capture_description.md"

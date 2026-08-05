@@ -1,9 +1,17 @@
+# Copyright (c) 2026 Don Michael Feeney Jr.
+# Licensed under the PolyForm Noncommercial License 1.0.0
+
 import json
 import os
 from unittest.mock import patch
+
 from requests.exceptions import RequestException
 
-from pipelines.network_forensics_pipeline import run_pipeline, extract_features_from_markdown
+from pipelines.network_forensics_pipeline import (
+    extract_features_from_markdown,
+    run_pipeline,
+)
+
 
 def test_network_forensics_pipeline_malicious_input(tmp_path):
     """
