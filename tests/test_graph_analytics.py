@@ -1,5 +1,5 @@
-# Copyright (c) 2026 Don Michael Feeney Jr.
-# Licensed under the PolyForm Noncommercial License 1.0.0
+# Copyright (c) Don Michael Feeney Jr.
+# Licensed under the MIT License.
 
 """
 Tests for the v3 Advanced Graph Analytics backend (ailee_core/backends/osint_semantic_backend.py).
