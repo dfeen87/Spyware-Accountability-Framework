@@ -1,6 +1,6 @@
 # Spyware Accountability Framework
 
-[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm_Noncommercial_1.0.0-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/badge/version-3.3.1-informational.svg)](CITATION.cff)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
@@ -137,16 +137,13 @@ All contributors and users are expected to follow our [Code of Conduct](CODE_OF_
 ---
 
 ## Enterprise Consulting & Integration
-This architecture is licensed under the PolyForm Noncommercial License 1.0.0. If your organization requires commercial scaling, proprietary integration, or dedicated technical consulting to deploy these models at an enterprise level, please reach out at: dfeen87@gmail.com
+This architecture is licensed under the MIT License. If your organization requires commercial scaling, proprietary integration, or dedicated technical consulting to deploy these models at an enterprise level, please reach out at: dfeen87@gmail.com
 
 ---
 
 ## License
 
-This project is released under the **PolyForm Noncommercial License 1.0.0**. See the [LICENSE](LICENSE) file for full terms.
+This project is released under the **MIT License**. See the [LICENSE](LICENSE) file for full terms.
 
-### Non-Commercial Terms Explanation
-The PolyForm Noncommercial License allows you to use, modify, and distribute this software for any noncommercial purpose.
-- **Permitted Uses:** Any noncommercial purpose is permitted. This includes personal use (research, testing, hobby projects, etc.), and use by noncommercial organizations such as educational institutions, charitable organizations, public research/safety/health/environmental protection organizations, and government institutions.
-- **Commercial Use:** Any commercial use is strictly prohibited. If your organization requires commercial use, please contact Don Michael Feeney Jr. at `dfeen87@gmail.com` to obtain a commercial license.
+The MIT License allows you to use, modify, and distribute this software for any purpose, commercial or non-commercial, as long as the copyright notice and permission notice are included.
 
