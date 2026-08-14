@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/dfeen87/Spyware-Accountability-Framework/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-3.3.1-informational.svg)](CITATION.cff)
+[![Version](https://img.shields.io/badge/version-4.1.0-informational.svg)](CITATION.cff)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 
 A **defensive, human-rights-aligned framework** that uses AILEE (Adaptive Integrity Layer for AI Decision Systems) as an analysis engine to:
@@ -34,6 +34,15 @@ A **defensive, human-rights-aligned framework** that uses AILEE (Adaptive Integr
 4. **Reputation Network:** `ailee_core/reputation` provides a federated, HMAC-signed reputation query interface for sharing intelligence between trusted NGO partners (v3).
 5. **Rulesets:** Example, synthetic rules (YARA, Sigma, Suricata) demonstrating how to construct defensive signatures safely.
 6. **Governance:** Strict guidelines and checklists to ensure contributions remain aligned with human rights and defensive purposes.
+7. **Local Defensive Plugin (New v3/Home Networking):** An optional, self-contained companion script (`examples/local_defensive_plugin.py`) that acts as a local security agent to convert passive SAF report findings into computer and home network blocklists (Pi-hole, hosts files, local firewalls).
+
+---
+
+## Personal & Home Network Defense (Local Plugin)
+
+For individuals looking to protect their own computers and home networks:
+- **Local Defensive Plugin:** You can run `examples/local_defensive_plugin.py` to watch SAF output directories or receive live webhooks, automatically compiling actionable indicators of compromise into local blocklists.
+- **Read the Integration Guide:** See [`docs/local_plugin_integration.md`](docs/local_plugin_integration.md) for step-by-step setup instructions for **Pi-hole, AdGuard Home, hosts files, and local macOS/Linux firewalls**.
 
 ---
 
@@ -123,7 +132,7 @@ If you use this framework in research or reports, please cite it using the metad
 @software{Feeney_Spyware_Accountability_Framework,
   author  = {Feeney Jr., Don Michael},
   title   = {Spyware Accountability Framework},
-  version = {3.3.1},
+  version = {4.1.0},
   URL     = {https://github.com/dfeen87/Spyware-Accountability-Framework}
 }
 ```
