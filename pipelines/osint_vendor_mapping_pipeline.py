@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
 import logging
-import re
+from typing import Any
+from urllib.parse import urlparse
 
 import networkx as nx
 import requests
@@ -18,10 +20,7 @@ from ailee_core.privacy import redact_pii
 # Configure basic logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-_SSRF_BLOCKED_HOSTS = {"localhost", "127.0.0.1", "169.254.169.254", "[::1]"}
-_SSRF_PRIVATE_PATTERN = re.compile(
-    r"^(10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+)$"
-)
+_SSRF_BLOCKED_HOSTS = {"localhost"}
 
 
 def _validate_webhook_url(url: str) -> bool:
@@ -29,17 +28,29 @@ def _validate_webhook_url(url: str) -> bool:
     Validates a webhook URL against SSRF risks.
     Returns True if the URL is safe to POST to, False otherwise.
     """
-    if not url.startswith("https://"):
-        logging.error("Webhook URL must use HTTPS scheme; refusing to connect.")
-        return False
     try:
-        from urllib.parse import urlparse
         parsed = urlparse(url)
-        hostname = parsed.hostname or ""
-        if hostname in _SSRF_BLOCKED_HOSTS or _SSRF_PRIVATE_PATTERN.match(hostname):
+        if parsed.scheme.lower() != "https":
+            logging.error("Webhook URL must use HTTPS scheme; refusing to connect.")
+            return False
+        hostname = parsed.hostname
+        if not hostname or parsed.username is not None or parsed.password is not None:
+            logging.error("Webhook URL must contain a valid hostname and no credentials.")
+            return False
+        normalized_hostname = hostname.rstrip(".").lower()
+        blocked_ip = False
+        try:
+            ip = ipaddress.ip_address(normalized_hostname)
+            blocked_ip = not ip.is_global
+        except ValueError:
+            pass
+        if (
+            normalized_hostname in _SSRF_BLOCKED_HOSTS
+            or blocked_ip
+        ):
             logging.error("Webhook URL hostname '%s' is in a blocked/private range; refusing to connect.", hostname)
             return False
-    except Exception:
+    except ValueError:
         logging.error("Failed to parse webhook URL; refusing to connect.")
         return False
     return True
@@ -57,6 +68,9 @@ def run_pipeline(input_path: str, output_path: str, webhook_url: str | None = No
     try:
         with open(input_path, 'r') as f:
             data = json.load(f)
+            if not isinstance(data, dict):
+                logging.error("JSON input must contain an object at the top level: %s", input_path)
+                return
             logging.info(f"Loaded OSINT dataset: {len(data.get('vendors', []))} vendors.")
     except FileNotFoundError:
         logging.error(f"Input file not found: {input_path}")
@@ -134,7 +148,7 @@ def run_pipeline(input_path: str, output_path: str, webhook_url: str | None = No
             }
             logging.info(f"Graph analytics: {graph_metrics}")
 
-        report = {
+        report: dict[str, Any] = {
             "status": "ACTIONABLE",
             "findings": analysis_result.model_dump(),
             "graph": {

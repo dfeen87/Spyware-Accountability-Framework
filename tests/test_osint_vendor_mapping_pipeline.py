@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 from requests.exceptions import RequestException
 
-from pipelines.osint_vendor_mapping_pipeline import run_pipeline
+from pipelines.osint_vendor_mapping_pipeline import _validate_webhook_url, run_pipeline
 
 
 def test_osint_vendor_mapping_pipeline_malicious_input(tmp_path):
@@ -204,3 +204,21 @@ def test_osint_vendor_mapping_pipeline_webhook_not_actionable(mock_post, tmp_pat
 
     mock_post.assert_not_called()
     assert os.path.exists(output_file)
+
+
+def test_webhook_url_validation_rejects_non_public_targets():
+    assert _validate_webhook_url("https://example.com/webhook") is True
+    assert _validate_webhook_url("https://127.0.0.2/webhook") is False
+    assert _validate_webhook_url("https://[::1]/webhook") is False
+    assert _validate_webhook_url("https://user@example.com/webhook") is False
+    assert _validate_webhook_url("https://") is False
+
+
+def test_osint_pipeline_rejects_non_object_json(tmp_path):
+    input_file = tmp_path / "list.json"
+    output_file = tmp_path / "output.json"
+    input_file.write_text("[]", encoding="utf-8")
+
+    run_pipeline(str(input_file), str(output_file))
+
+    assert not output_file.exists()

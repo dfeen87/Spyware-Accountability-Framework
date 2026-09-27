@@ -8,6 +8,7 @@ from unittest.mock import patch
 from requests.exceptions import RequestException
 
 from pipelines.network_forensics_pipeline import (
+    _validate_webhook_url,
     extract_features_from_markdown,
     run_pipeline,
 )
@@ -174,3 +175,21 @@ def test_extract_features_from_markdown_clean_words():
     result = extract_features_from_markdown(content)
     assert "c2.example-spyware.xyz" in result["domains"]
     assert "normal.com" in result["domains"]
+
+
+def test_webhook_url_validation_rejects_non_public_targets():
+    assert _validate_webhook_url("https://example.com/webhook") is True
+    assert _validate_webhook_url("https://127.0.0.2/webhook") is False
+    assert _validate_webhook_url("https://[::1]/webhook") is False
+    assert _validate_webhook_url("https://user@example.com/webhook") is False
+    assert _validate_webhook_url("https://") is False
+
+
+def test_network_pipeline_rejects_non_object_json(tmp_path):
+    input_file = tmp_path / "list.json"
+    output_file = tmp_path / "output.json"
+    input_file.write_text("[]", encoding="utf-8")
+
+    run_pipeline(str(input_file), str(output_file))
+
+    assert not output_file.exists()

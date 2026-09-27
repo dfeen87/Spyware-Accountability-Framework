@@ -22,9 +22,9 @@ Generated Artifacts:
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
 import logging
-import re
 import sys
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -39,24 +39,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger("local_defensive_plugin")
 
-IP_V4_PATTERN = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
-IP_V6_PATTERN = re.compile(r"^[0-9a-fA-F:]+$")
-
-
 def is_ip_address(ioc: str) -> bool:
     """
     Determines if a string is a valid IPv4 or potential IPv6 address.
     """
-    ioc_stripped = ioc.strip()
-    if IP_V4_PATTERN.match(ioc_stripped):
-        parts = ioc_stripped.split(".")
-        try:
-            return all(0 <= int(p) <= 255 for p in parts)
-        except ValueError:
-            return False
-    if ":" in ioc_stripped and IP_V6_PATTERN.match(ioc_stripped):
+    try:
+        ipaddress.ip_address(ioc.strip())
         return True
-    return False
+    except ValueError:
+        return False
 
 
 def load_existing_lines(filepath: Path) -> set[str]:
