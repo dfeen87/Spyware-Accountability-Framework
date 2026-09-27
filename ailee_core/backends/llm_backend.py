@@ -83,7 +83,7 @@ def _call_live_llm(input_data: dict[str, Any]) -> AnalysisResult | None:
         return None
 
     serialized = json.dumps(input_data)
-    if len(serialized) > _MAX_LLM_INPUT_SIZE_BYTES:
+    if len(serialized.encode("utf-8")) > _MAX_LLM_INPUT_SIZE_BYTES:
         logger.warning("Input data exceeds 100KB limit for LLM backend; falling back to stub.")
         return None
 

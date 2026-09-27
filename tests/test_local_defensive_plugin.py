@@ -33,6 +33,7 @@ def test_is_ip_address():
     assert is_ip_address("256.256.256.256") is False
     assert is_ip_address("not_an_ip.com") is False
     assert is_ip_address("2001:db8::1") is True
+    assert is_ip_address(":::") is False
     assert is_ip_address("  192.168.1.50   ") is True
 
 
